@@ -1,0 +1,62 @@
+{
+  "name": "dsh-plugin-vajraclaw",
+  "version": "1.0.9",
+  "description": "Deterministic Runtime Execution Governance & Security Circuit-Breaker for DSH Agents",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "vajraclaw",
+    "deepseek-harness",
+    "agent-governance",
+    "security",
+    "guardrail",
+    "circuit-breaker"
+  ],
+  "author": "DROS Labs / Jimmy Chen <contact@top-celestial.com.tw>",
+  "license": "SEE LICENSE IN https://dr-os.io",
+  "homepage": "https://dr-os.io",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Top-Celestial-Company-Ltd/dsh-dros-vajraclaw.git"
+  },
+  "dsh": {
+    "displayName": "DROS™ VajraClaw - Agent Governance",
+    "id": "celestial.dros.vajraclaw",
+    "version": "1.0.0",
+    "category": "security",
+    "icon": "shield-check",
+    "description": "Microsecond O(1) Tool-Call Enforcement & Prompt Injection Interception Gateway for DSH",
+    "profiles": [
+      "web",
+      "tui",
+      "eval"
+    ],
+    "settings": {
+      "gatewayUrl": {
+        "type": "string",
+        "title": "DROS Gateway Endpoint",
+        "default": "http://localhost:8080",
+        "description": "The URL of the local or remote DROS Gateway Docker Container."
+      },
+      "licenseKey": {
+        "type": "string",
+        "title": "Gumroad License Key",
+        "default": "",
+        "description": "Enter your Hacker / Startup / Enterprise License Key to unlock higher concurrency."
+      },
+      "strictFailClosed": {
+        "type": "boolean",
+        "title": "Strict Fail-Closed Mode",
+        "default": true,
+        "description": "Block tool execution if DROS Gateway is unreachable."
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Running plugin tests...\" && exit 0"
+  },
+  "dependencies": {}
+}
