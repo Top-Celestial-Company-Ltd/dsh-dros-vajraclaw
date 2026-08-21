@@ -15,40 +15,68 @@
 
 > 🎁 **【個人開發者社群版：永久免費】**
 > 
-> 我們深信每位開發者的個人電腦都值得享有企業級的執行期防禦。
-> 
 > * 🛡️ **個人使用 100% 永久免費**（支援本機跨多個 Agent 累計最多 **5 個並發 Agent**）。
 > * 🪪 **原生 W3C DID 密碼學指紋 (`RFC-010`)**：為每次 Tool 調用自動簽署去中心化身分，不可抵賴。
 > * ⚡ **Universal Docker 網關**：同時保護 DSH 外掛、MCP 服務器與各類終端 CLI Agent。
 
 ---
 
-## 🏛️ 通用多 Agent 混合工作站拓撲 (Multi-Agent Architecture)
+## 🏛️ 核心哲學：引領開源資安陣營，守護極致開放的插件生態
 
-DROS 雖然以 DSH 外掛形式提供極致便利的一鍵安裝，但其底層是 **標準化 Docker 容器 (`localhost:8080`)**。這意味著您可以將開發機上的所有 Agent 同時納入 DROS 統一治理：
+**DeepSeek Harness (DSH)** 的偉大之處在於其極致的開放性──**「一切皆插件 (Everything is a plugin)」**。然而，極致的開放必然伴隨著攻擊面的無限放大：
+* 第三方惡意外掛可能企圖越權讀檔、篡改全域記憶體，或暗中將數據發往外部 C2 伺服器。
+* **DROS 扮演了「開源資安與網管的領頭羊與核心定錨」**：攜手 Falco eBPF、Cilium 網路隔離與 Wazuh 審計，為全球開發者架構起完整的**立體防禦縱深**，讓每位 Agent 玩家都能安心享受開源生態的自由！
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 1. 應用程式內部層 (In-App Layer: DSH 內部插件)              │  <── 🏢 前台安檢 (Prompt Filter)
+│    - NeMo / Llama-Guard: 負責對話語意審查與不良內容過濾     │
+└──────────────────────────────┬──────────────────────────────┘
+                               │ (通過語意審查，Agent 發起 Tool Call)
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 2. 運行期治理閘道 (Runtime Gateway: DROS VajraClaw)          │  <── 🏛️ 金庫守衛 (Execution Identity)
+│    - W3C DID 身分指紋 + 364ns 權限點陣查表                  │      未授權操作於 1 微秒內硬性物理熔斷！
+└──────────────────────────────┬──────────────────────────────┘
+                               │ (放行合法的 Syscall / Egress 流量)
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 3. 基礎設施與核心層 (Infra SecOps: OpenShip / Falco / Cilium)│  <── 🚓 特警防線 (Kernel & Network Fabric)
+│    - Cilium 封鎖惡意外發；Falco eBPF 核心層捕捉容器逃逸     │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🧭 治理邊界：DROS 守護什麼 vs. 不守護什麼
+
+為了維護極致嚴謹的工程界線，DROS 明確劃定防禦邊界：
+
+| 攻擊手法與威脅情境 | 傳統語意 Guardrails | DROS VajraClaw 物理微核心 | 最終防禦效果 |
+| :--- | :---: | :---: | :--- |
+| **間接提示詞注入** *(網頁/PDF 夾帶指令詐騙 Agent 刪庫)* | ❌ LLM 語意混淆易被繞過 | ✅ **確定性攔截** | **100% 物理熔斷** (<1μs 點陣查表) |
+| **側向越權調用** *(未授權外掛偷偷呼叫 DB/付款 Tool)* | ❌ 應用層邏輯脆弱 | ✅ **密碼學阻斷** | **100% 阻斷** (W3C DID 權限綁定) |
+| **私自外發洩密** *(外掛私自連線外部 C2 傳輸機密)* | ❌ LLM 完全無感 | ✅ **網路微隔離** | **100% 丟包** (`internal: true` 沙盒) |
+| **容器逃逸與宿主機提權** | ❌ 無主機核心視角 | ⚠️ 協同 Falco eBPF | **核心層捕捉** (`cap_drop: ALL`) |
+| **業務邏輯錯誤與模型幻覺** | ❌ 超出資安範疇 | ❌ 超出資安範疇 | 屬 LLM 生成品質，由 Prompt 工程優化 |
+
+---
+
+## 🔑 零信任金鑰與 Root 救援生死警示
+
+DROS 嚴格貫徹 **零信任密碼學架構**：
+1. **原廠無後門聲明 (No Backdoors)**：原廠無任何萬用金鑰。您的 Ed25519 私鑰種子 (Seed Hex) 僅存在本地記憶體，**請務必自行妥善備份至密碼庫 (1Password / Bitwarden)**。
+2. **重建信任根 (Rebuilding Root of Trust)**：若遺失私鑰，唯有在保有伺服器最高 **Root / SSH 管理員權限** 的前提下，方可手動替換驗證公鑰以重建信任根。
+
+---
+
+## 🌐 通用多 Agent 混合工作站拓撲 (DSH + AGY + Codex + Claude)
+
+DROS 雖以 DSH 外掛形式提供一鍵安裝，但底層是 **標準化 Docker 容器 (`localhost:8080`)**，單台開發機可同時守護多個不同平台的活躍 Agent（共用 5 個並發配額）：
 
 * **DSH 使用者** ➔ 透過 `dsh-plugin-vajraclaw` 接入。
 * **Google Antigravity (AGY)** ➔ 透過 MCP 網關或 Python SDK 接入。
 * **OpenAI Codex / Claude Code / Cursor** ➔ 透過本地 REST API / Hook 攔截接入。
-* **共用 5 並發上限** ➔ 單台開發機總共可同時守護 5 個活躍 Agent！
-
----
-
-## 💡 防禦縱深最佳實踐與生態外掛堆疊指南
-
-為了達成最極致的安全防禦，我們強烈建議根據您的使用情境，將 DROS 與各類開源工具進行「防禦縱深堆疊」：
-
-### 情境 1：純 DSH (DeepSeek Harness) 深度玩家
-若您主要在 DSH 環境中開發：
-1. **底層：DROS VajraClaw (`dsh-plugin-vajraclaw`)** ➔ 負責最底層的 **<1μs 確定性 C-ABI 工具熔斷與提示注入實體阻斷**。
-2. **語意層：搭配 DSH 開源資安外掛** ➔ 可搭配社群的語意審查外掛（如 NeMo / Llama-Guard 相關外掛）進行前期對話過濾。
-3. **傳輸層：搭配網管/代理外掛** ➔ 設定對外流量限制，形成「語意過濾 ➔ DROS 物理熔斷 ➔ 網路邊界」三重防禦縱深。
-
-### 情境 2：多 Agent 混合開發者 (DSH + AGY + Codex + Claude Code)
-若您同時調度多個不同平台的 Agent（類似 OpenShip / OpenClaw 拓撲）：
-1. **核心定錨：DROS Gateway 作為實體熔斷網關** ➔ 所有 Agent 共享 Docker 網關，統一由 DROS 派發 **W3C DID 指紋** 並實施工具權限點陣圖查表。
-2. **MCP 集中化治理** ➔ 將本機所有 MCP 工具伺服器置於 DROS 之後，任何 Agent 呼叫終端或資料庫前必經 DROS 授權。
-3. **開源網管與沙箱堆疊** ➔ 搭配本機 Docker 沙箱（如 gVisor / Docker Desktop Sandbox）與本機防火牆，構建涵蓋「身分 ➔ 權限 ➔ 執行熔斷 ➔ 容器隔離」的完整立體防禦縱深！
 
 ---
 
@@ -57,7 +85,8 @@ DROS 雖然以 DSH 外掛形式提供極致便利的一鍵安裝，但其底層�
 | 安全功能 / 6-Pillar 機制維度 | 🟢 Hacker / 個人社群版 (免費) | 🔵 Startup | 🟣 Enterprise | 👑 Sovereign |
 | :--- | :---: | :---: | :---: | :---: |
 | **目標客戶** | **個人開發者 / 本機多 Agent 玩家** | 10~50人新創團隊 | 中大型企業 / 上市公司 | 金融金控 / 國防 |
-| **價格 (USD)** | **100% 永久免費** | **$799/年** | **$7,990/年 (基礎年約)** | **專案諮詢** |
+| **價格 (USD)** | **100% 永久免費 ($0)** | **$1,990 / 年** | **$19,990 / 年 (基礎年約)** | **專案諮詢** |
+| **單個 Agent 均攤成本** | **$0** | **約 $5.5 / 月 (超值)** | **約 $3.7 / 月 (遠低於 Adobe)** | 客製化 |
 | **機器授權 (UUIDs)** | **1 組 UUID** | 3 組 UUIDs | 15 組 UUIDs | **無限制** |
 | **Concurrent Agents 上限** | **5 個並發 Agent** | 30 個 | 450 個 | **無限制 (Swarm)** |
 | **Pillar 1：Principal 身份證明** | ✅ **原生 W3C `did:key` 指紋** | ✅ **3-Tier PKI DIT** | ✅ **跨域 BEC 憑證發放** | ✅ 硬體 Dongle 印記 |
@@ -86,6 +115,26 @@ docker run -d -p 8080:8080 --name dros-gateway dros/hacker-gateway:v1.0.0
   ```
 * **AGY / Codex / Python SDK 使用者**：
   設定環境變數 `DROS_GATEWAY_URL=http://localhost:8080` 即可受 DROS 守護。
+
+👉 **[📖 閱讀進階資安與多 Agent 拓撲加固手冊 (docs/ADVANCED_SECOPS_GUIDE.md)](docs/ADVANCED_SECOPS_GUIDE.md)**（獲取 `internal: true` 網路微隔離 Compose 範本、Falco eBPF 核心防逃逸與 Wazuh SIEM 整合指南）。
+
+---
+
+## 📜 技術白皮書與學術論文 (Academic Citations & DOIs)
+
+本系統之架構設計與專利防線全面奠基於 **DROS 系列學術論文三部曲 (The DROS Academic Trilogy)**：
+
+1. 🏛️ **Paper 1: DROS-6P (企業信任與六大邊界治理)**
+   * *DROS-6P: A Unified Deterministic Runtime Governance Architecture Closing the Six Fundamental Trust Boundaries of Enterprise AI Agents*
+   * **Zenodo DOI**: [`10.5281/zenodo.21808499`](https://doi.org/10.5281/zenodo.21808499) | **Record**: [zenodo.org/records/21808499](https://zenodo.org/records/21808499)
+
+2. 🏛️ **Paper 2: DROS 4-Layer (四層深度防禦縱深架構)**
+   * *DROS 4-Layer Defense-in-Depth Architecture for Autonomous AI Workloads*
+   * **Zenodo DOI**: [`10.5281/zenodo.21755654`](https://doi.org/10.5281/zenodo.21755654) | **Record**: [zenodo.org/records/21755654](https://zenodo.org/records/21755654)
+
+3. 🏛️ **Paper 3: DROS-PGM (實體防護模組與不可否認性運行期歸責)**
+   * *Runtime Attribution Framework: An External C-ABI and PKI-Based Zero-Trust Infrastructure for Non-Repudiable Execution Governance in Multi-Agent Systems*
+   * **Zenodo DOI**: [`10.5281/zenodo.21903687`](https://doi.org/10.5281/zenodo.21903687) | **Record**: [zenodo.org/records/21903687](https://zenodo.org/records/21903687)
 
 ---
 
