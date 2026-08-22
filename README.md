@@ -42,7 +42,7 @@ Universal **Deterministic Runtime Execution Governance & Security Circuit-Breake
 
 > 🎁 **【Community Edition: Free Forever for Personal Multi-Agent Workstations】**
 > 
-> * 🛡️ **100% Free for Personal Use** (Enforces a unified execution governance boundary for up to **5 Concurrent Agents** across your local workstation).
+> * 🛡️ **100% Free for Personal Use (Non-Commercial Use)** (Enforces a unified execution governance boundary for up to **5 Concurrent Agents** across your local workstation).
 > * 🪪 **Three-Tier Cryptographic Model (`RFC-010`)**:
 >   * **Identity**: W3C DID Native Key Binding (`did:key:z6Mku...`).
 >   * **Evidence**: Ed25519 Cryptographic Signatures per tool execution step.
@@ -214,7 +214,7 @@ The architecture and patent boundaries of DROS are established in **The DROS Aca
 
 > 🎁 **【個人開發者社群版：多 Agent 工作站永久免費】**
 > 
-> * 🛡️ **個人使用 100% 永久免費**（為本機多 Agent 工作站建立統一安全邊界，支援最多 **5 個並發 Agent**）。
+> * 🛡️ **個人使用（非商業用途） 100% 永久免費**（為本機多 Agent 工作站建立統一安全邊界，支援最多 **5 個並發 Agent**）。
 > * 🪪 **三層密碼學架構模型 (`RFC-010`)**：
 >   * **主體身分 (Identity)**：原生 W3C DID 金鑰綁定 (`did:key:z6Mku...`)。
 >   * **執行存證 (Evidence)**：每次 Tool 執行產生 Ed25519 數位簽章。
