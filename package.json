@@ -35,6 +35,7 @@
     "displayName": "DROS™ VajraClaw - Agent Governance",
     "id": "celestial.dros.vajraclaw",
     "version": "1.0.0",
+    "bundle": "dist/index.js",
     "category": "security",
     "icon": "shield-check",
     "description": "Microsecond O(1) Tool-Call Enforcement & Prompt Injection Interception Gateway for DSH",
