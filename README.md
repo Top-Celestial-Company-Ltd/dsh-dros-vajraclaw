@@ -48,6 +48,17 @@ Universal **Deterministic Runtime Execution Governance & Security Circuit-Breake
 >   * **Evidence**: Ed25519 Cryptographic Signatures per tool execution step.
 >   * **Accountability**: Tamper-evident Local JSON Audit Chains.
 > * ⚡ **Universal Docker Gateway**: Protects DSH plugins, MCP servers, and external CLI agents simultaneously.
+>
+> ⚖️ **【Explicit Non-Commercial vs Commercial License Boundaries】**
+> 
+> | Dimension | 🟢 Permitted (Community Edition: $0 Forever) | 🔴 Prohibited (Requires Startup / Enterprise License) |
+> | :--- | :--- | :--- |
+> | **Entity Type** | Natural persons, individual OSS contributors, students, hobbyists | Legal entities, corporations, consulting firms, agencies |
+> | **Use Case** | **Personal skill learning**, local sandbox testing, OSS audits, toy projects | **Internal enterprise workflows**, production services, team automation |
+> | **Commercial Value** | Zero direct or indirect revenue generation | **Paid SaaS/API backends**, client billable deliverables, commercial ops |
+> | **Agent Scale** | Up to 5 concurrent local agents | >5 concurrent agents, multi-server clusters, K8s orchestration |
+> 
+> > 📌 **Compliance Notice**: Any deployment operated by corporate entities, salaried employees within the scope of employment, or used to generate commercial value strictly requires a commercial license.
 
 ---
 
