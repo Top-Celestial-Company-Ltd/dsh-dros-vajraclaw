@@ -73,7 +73,7 @@
     "docs"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "node ./node_modules/typescript/bin/tsc --declaration --outDir dist src/index.ts",
     "prepublishOnly": "npm run build",
     "test": "echo \"Running plugin tests...\" && exit 0"
   },
