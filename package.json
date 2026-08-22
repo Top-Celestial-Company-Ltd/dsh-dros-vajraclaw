@@ -77,5 +77,8 @@
     "prepublishOnly": "npm run build",
     "test": "echo \"Running plugin tests...\" && exit 0"
   },
-  "dependencies": {}
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "typescript": "^7.0.2"
+  }
 }
