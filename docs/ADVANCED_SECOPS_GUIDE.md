@@ -1,7 +1,162 @@
-# 🛡️ DROS™ 進階資安與多 Agent 拓撲加固手冊 (ADVANCED_SECOPS_GUIDE.md)
-### 構建「預設不可繞過」的零信任 AI Agent 執行期縱深防禦體系
+# 🛡️ DROS™ Advanced SecOps & Multi-Agent Hardening Guide
+### Constructing a "Default-Secure" Zero-Trust Runtime Defense-in-Depth for Autonomous AI Agents
 
-[English](#english) | [繁體中文說明](#-繁體中文說明)
+[English](#english-guide) | [繁體中文說明](#-繁體中文說明)
+
+---
+
+# 🇺🇸 English Guide
+
+This manual is engineered for **Security Architects, SecOps Engineers, and Multi-Agent Practitioners (OpenShip / OpenClaw / DSH Ecosystems)**. It details how to orchestrate **DROS VajraClaw**, **DSH In-App Plugins**, and **Open-Source Infrastructure Tools (Falco, Cilium, Wazuh)** to construct an impregnable, multi-tiered **Defense-in-Depth** perimeter.
+
+---
+
+## 1. 🏛️ Core Security Philosophy: The Three-Tier Defense Hierarchy
+
+Developers often confuse "Application-level Plugins", "Runtime Governance Gateways", and "Host / Network Security Infrastructure". In a modern Zero-Trust architecture, these three layers have distinct roles, boundaries, and authority levels:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 1. In-App Layer: DSH Internal Security Plugins              │  <── 🏢 Reception Security (Prompt Filtering)
+│    - NeMo / Llama-Guard / Semantic toxicity filters         │      Examines conversational intent & prompt injections
+└──────────────────────────────┬──────────────────────────────┘
+                               │ (Valid Prompt passes, Agent prepares Tool Call)
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 2. Runtime Gateway: DROS VajraClaw (Core Anchor)            │  <── 🏛️ Vault Gatekeeper (Execution Identity)
+│    - W3C DID Cryptographic Fingerprint (RFC-010)            │      Enforces tool permission bitmaps & non-repudiation
+│    - 364ns O(1) Tool Permission Bitmap Check                │      Fuses unauthorized Syscalls/actions in <1μs!
+│    - C-ABI / FFI In-Band Hard Circuit-Breaker               │
+└──────────────────────────────┬──────────────────────────────┘
+                               │ (Permitted Tool Call / Syscall / Egress)
+                               ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 3. Infrastructure Layer: Open-Source SecOps (Cilium / Falco)│  <── 🚓 Police Grid (Kernel & Network Fabric)
+│    - Cilium: L3-L7 Egress Micro-segmentation                │      Blocks C2 data exfiltration & network anomalies
+│    - Falco / Tracee: Linux eBPF Kernel-level Syscall Probes │      Catches 0-day container escapes at the kernel layer
+│    - Wazuh / Loki: Centralized Cryptographic SIEM Auditing  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 💡 The Conceptual Analogy:
+* **DSH In-App Plugins (Reception Security)**: Inspects the incoming text/prompt from users or web searches to ensure no malicious instructions are disguised in plain text (Natural Language Semantic Filtering).
+* **DROS VajraClaw (Vault Gatekeeper)**: As soon as the Agent attempts physical action (Tool Call / File Read / Exec), DROS verifies its W3C DID chip and permission bitmap. If unauthorized, it triggers a **hard binary circuit-break in 364 nanoseconds**.
+* **External Infra SecOps (Police Grid)**: Establishes a zero-trust network fence (Cilium) and deploys kernel-level sensors (Falco eBPF) around the container sandbox. Even if rogue code exploits a 0-day to escape the container, it is intercepted and neutralized at the Linux kernel layer.
+
+---
+
+## 2. 🔒 Default-Secure Architecture: Docker Egress Micro-Segmentation
+
+To completely prevent compromised Agents or rogue third-party plugins from bypassing the DROS gateway and making direct external connections (Data Exfiltration), implement this **Zero-Trust Network Isolation** topology:
+
+### 🛡️ Production-Grade Hardened Compose (`docker-compose.hardened.yml`)
+
+```yaml
+version: '3.8'
+
+services:
+  # -------------------------------------------------------------
+  # 1. DROS Security Gateway (The ONLY node with outbound egress)
+  # -------------------------------------------------------------
+  dros-gateway:
+    image: ghcr.io/top-celestial/vajraclaw-gateway:v1.1.0
+    container_name: dros-gateway
+    environment:
+      - DROS_MODE=community
+      - DROS_CONCURRENT_LIMIT=5
+    volumes:
+      - audit-logs:/var/log/dros/audit
+    networks:
+      - agent-sandbox   # Connects to isolated internal network
+      - internet-egress # Connects to external public internet
+    restart: unless-stopped
+
+  # -------------------------------------------------------------
+  # 2. Confined Agent Container (Sandbox with NO default gateway)
+  # -------------------------------------------------------------
+  dsh-workspace:
+    image: deepseek/dsh:latest
+    container_name: dsh-workspace
+    environment:
+      - DROS_GATEWAY_URL=http://dros-gateway:8080
+      - HTTP_PROXY=http://dros-gateway:8080
+      - HTTPS_PROXY=http://dros-gateway:8080
+    cap_drop:
+      - ALL             # Strips all Linux root capabilities (Anti-Privilege Escalation)
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - agent-sandbox   # Placed exclusively on the internal network
+    depends_on:
+      - dros-gateway
+
+  # -------------------------------------------------------------
+  # 3. Wazuh SIEM Audit Agent (Collects Non-Repudiable Logs)
+  # -------------------------------------------------------------
+  wazuh-agent:
+    image: wazuh/wazuh-agent:latest
+    container_name: wazuh-agent
+    volumes:
+      - audit-logs:/var/log/dros/audit:ro # Read-only mount of signed logs
+    networks:
+      - agent-sandbox
+    restart: unless-stopped
+
+# ---------------------------------------------------------------
+# Core Network Definition: internal: true strips Default Gateway
+# ---------------------------------------------------------------
+networks:
+  agent-sandbox:
+    internal: true      # Critical! Strips default route; direct curl/socket fails instantly
+  internet-egress:
+    driver: bridge
+
+volumes:
+  audit-logs:
+```
+
+---
+
+## 3. 🧭 Mitigating 5 Hidden DSH Security Blind Spots
+
+| Hidden Vulnerability | Attack Vector & Exploit Mechanism | DROS + Open-Source SecOps Mitigation |
+| :--- | :--- | :--- |
+| **1. Supply-Chain Poisoning** | Third-party plugins inject malicious shell scripts in `npm postinstall` lifecycle. | • Enforce SHA-256 Lockfile hash pinning during build.<br>• Disable dynamic remote code pulling at startup. |
+| **2. Prototype Pollution** | Rogue plugins tamper with `Object.prototype` in Node.js runtime to hijack tokens. | • DROS decision engine is compiled in C-ABI/Rust separate process; memory pollution cannot reach kernel. |
+| **3. ReDoS / Loop DoS** | Malicious plugins craft catastrophic regex backtracking or infinite loops to stall Event Loop. | • Enforce Docker cgroups resource quotas (CPU/Mem).<br>• DROS built-in microsecond Watchdog circuit-break timer. |
+| **4. Ghost Handlers** | Background Daemons spawned by uninstalled plugins continue secretly listening to data. | • Enforce strict Linux PID Namespace hard teardown (`kill -9 -PID`) upon sandbox exit. |
+| **5. Cross-Plugin Data Bleed** | DB credentials retrieved by an upstream plugin bleed into context sent to a downstream plugin. | • Dynamic Data Tainting tracks secret tags across plugin boundaries, auto-redacting before forwarding. |
+
+---
+
+## 4. 🌐 Multi-Agent Workstation Topology (DSH + AGY + Codex + Claude Code)
+
+If your local developer machine runs multiple AI frameworks simultaneously (e.g., Google Antigravity, OpenAI Codex, Claude Code CLI, Cursor IDE), you can route all agents through your single local DROS Gateway:
+
+```
+[ Local Developer Workstation ]
+  ├── Agent 1 (DSH Web):     dsh plugin (Auto-routed) ────┐
+  ├── Agent 2 (AGY Pro):     MCP Server (Proxy-routed) ───┼──> [ ⚡ DROS Gateway :8080 ]
+  ├── Agent 3 (Claude Code): CLI Proxy (Env-routed) ──────┤     - 5 Concurrent Governance Envelope
+  └── Agent 4 (Codex/Cursor):REST Hook (SDK-routed) ──────┘     - Unified W3C DID Passport (`RFC-010`)
+                                                                - 364ns O(1) Permission Circuit-Break
+```
+
+---
+
+## 5. 📜 Academic Papers & Reference DOIs
+The deterministic containment architecture is grounded in **The DROS Academic Trilogy**:
+1. **DROS-6P**: *A Unified Deterministic Runtime Governance Architecture Closing the Six Fundamental Trust Boundaries of Enterprise AI Agents* ([DOI: 10.5281/zenodo.21808499](https://doi.org/10.5281/zenodo.21808499))
+2. **DROS 4-Layer**: *DROS 4-Layer Defense-in-Depth Architecture for Autonomous AI Workloads* ([DOI: 10.5281/zenodo.21755654](https://doi.org/10.5281/zenodo.21755654))
+3. **DROS-PGM**: *Runtime Attribution Framework: An External C-ABI and PKI-Based Zero-Trust Infrastructure for Non-Repudiable Execution Governance in Multi-Agent Systems* ([DOI: 10.5281/zenodo.21903687](https://doi.org/10.5281/zenodo.21903687))
+
+---
+
+## 🏛️ Official Organization & Contact Information
+* **Company**: Top-Celestial Company Ltd. (康宸園有限公司)
+* **Official Website**: [https://dr-os.io](https://dr-os.io)
+* **Customer Support & Business Inquiries**: [service@dr-os.io](mailto:service@dr-os.io)
+* **GitHub Organization**: [https://github.com/Top-Celestial-Company-Ltd](https://github.com/Top-Celestial-Company-Ltd)
 
 ---
 
@@ -143,19 +298,16 @@ volumes:
 
 ---
 
-# 🇺🇸 English Guide
-
-This advanced manual provides architectural blueprints for SecOps engineers and multi-agent practitioners looking to build a **Default-Secure, Defense-in-Depth** environment around DROS VajraClaw, DSH, and open-source infrastructure tools (Falco, Cilium, Wazuh).
-
-### 🏛️ The Three Tiers of Agent Security
-1. **In-App Layer (DSH Plugins)**: Handles prompt filtering, conversational sanitization, and semantic evaluation.
-2. **Runtime Gateway (DROS VajraClaw)**: The single choke point managing **W3C DID fingerprints (`RFC-010`)** and **<1μs deterministic C-ABI tool熔斷**.
-3. **Infrastructure Layer (Falco / Cilium / Wazuh)**: Enforces **eBPF kernel monitoring, egress micro-segmentation, and court-admissible SIEM auditing**.
+## 五、 技術白皮書與學術論文 (Academic Citations & DOIs)
+本系統之架構設計與專利防線全面奠基於 **DROS 系列學術論文三部曲 (The DROS Academic Trilogy)**：
+1. 🏛️ **Paper 1: DROS-6P (企業信任與六大邊界治理)** ([DOI: 10.5281/zenodo.21808499](https://doi.org/10.5281/zenodo.21808499))
+2. 🏛️ **Paper 2: DROS 4-Layer (四層深度防禦縱深架構)** ([DOI: 10.5281/zenodo.21755654](https://doi.org/10.5281/zenodo.21755654))
+3. 🏛️ **Paper 3: DROS-PGM (實體防護模組與不可否認性運行期歸責)** ([DOI: 10.5281/zenodo.21903687](https://doi.org/10.5281/zenodo.21903687))
 
 ---
 
-## 🏛️ Official Organization & Contact Information
-* **Company**: Top-Celestial Company Ltd. (康宸園有限公司)
-* **Official Website**: [https://dr-os.io](https://dr-os.io)
-* **Customer Support & Business Inquiries**: [service@dr-os.io](mailto:service@dr-os.io)
-* **GitHub Organization**: [https://github.com/Top-Celestial-Company-Ltd](https://github.com/Top-Celestial-Company-Ltd)
+## 🏛️ 官方發行組織與聯繫資訊 (Official Contact)
+* **發行主體**：Top-Celestial Company Ltd. (康宸園有限公司)
+* **官方網站**：[https://dr-os.io](https://dr-os.io)
+* **客戶服務與商務諮詢**：[service@dr-os.io](mailto:service@dr-os.io)
+* **GitHub 官方組織**：[https://github.com/Top-Celestial-Company-Ltd](https://github.com/Top-Celestial-Company-Ltd)
