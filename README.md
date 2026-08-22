@@ -11,12 +11,42 @@
 
 Universal **Deterministic Runtime Execution Governance & Security Circuit-Breaker** Gateway. Natively integrates as a **DeepSeek Harness (DSH) plugin** while functioning as a centralized Docker-based security sidecar for **AGY (Google Antigravity), OpenAI Codex, Claude Code, Cursor, and OpenClaw**.
 
+> 🎯 **Key Architectural Insight:**  
+> **DSH is the distribution channel; DROS is the cross-agent enforcement layer.**
+
+```text
+                 GET IT HERE
+              DSH Marketplace
+                     │
+                     │ distribution
+                     ▼
+               DROS VajraClaw
+                     │
+              DEPLOY IT HERE
+             Docker / Sidecar
+                     │
+       ┌─────────────┼─────────────┐
+       ▼             ▼             ▼
+      DSH           AGY          Codex ... (Claude, Cursor, OpenClaw)
+       │             │             │
+       └─────────────┼─────────────┘
+                     ▼
+             DROS Enforcement
+                     │
+         ┌───────────┼───────────┐
+         ▼           ▼           ▼
+        MCP         API         CLI
+```
+
 ---
 
-> 🎁 **【Community Edition: Free Forever for Personal Developers】**
+> 🎁 **【Community Edition: Free Forever for Personal Multi-Agent Workstations】**
 > 
-> * 🛡️ **100% Free for Personal Use** (Supports up to **5 Concurrent Agents** across your local workstation).
-> * 🪪 **Native W3C DID Fingerprint (`RFC-010`)**: Automatically signs every tool invocation with decentralized cryptographic identity.
+> * 🛡️ **100% Free for Personal Use** (Enforces a unified execution governance boundary for up to **5 Concurrent Agents** across your local workstation).
+> * 🪪 **Three-Tier Cryptographic Model (`RFC-010`)**:
+>   * **Identity**: W3C DID Native Key Binding (`did:key:z6Mku...`).
+>   * **Evidence**: Ed25519 Cryptographic Signatures per tool execution step.
+>   * **Accountability**: Tamper-evident Local JSON Audit Chains.
 > * ⚡ **Universal Docker Gateway**: Protects DSH plugins, MCP servers, and external CLI agents simultaneously.
 
 ---
@@ -36,7 +66,7 @@ The brilliance of **DeepSeek Harness (DSH)** lies in its radical openness: *"Eve
                                ▼
 ┌─────────────────────────────────────────────────────────────┐
 │ 2. Runtime Gateway: DROS VajraClaw (Core Anchor)            │  <── 🏛️ Vault Gatekeeper (Execution Identity)
-│    (W3C DID Signature + 364ns O(1) Tool Permission Bitmap)  │      Hard-fuses unauthorized actions in <1μs!
+│    (W3C DID Signature + 364ns O(1) Tool Permission Bitmap)  │      Enforcement-path latency <1 μs under specified benchmark!
 └──────────────────────────────┬──────────────────────────────┘
                                │ (Permitted Tool Call)
                                ▼
@@ -50,15 +80,15 @@ The brilliance of **DeepSeek Harness (DSH)** lies in its radical openness: *"Eve
 
 ## 🧭 Governance Scope: What DROS Defends vs. What It Doesn't
 
-To maintain complete architectural clarity, DROS defines crisp defensive boundaries:
+To maintain complete architectural clarity and rigorous technical defense, DROS defines crisp defensive boundaries:
 
 | Attack Vector / Threat | Traditional Semantic Guardrails | DROS VajraClaw Core | Defensive Outcome |
 | :--- | :---: | :---: | :--- |
-| **Indirect Prompt Injection** *(PDF/Web hijacking tool execution)* | ❌ Easily fooled by LLM confusion | ✅ **Deterministic Block** | **100% In-Band Fused** (<1μs Bitmap Match) |
-| **Rogue Tool Calling** *(Unauthorized DB write / Shell execution)* | ❌ Flawed application logic | ✅ **Cryptographic Block** | **100% Blocked** (W3C DID Key Binding) |
-| **Data Exfiltration** *(Plugin silently sending tokens to C2)* | ❌ Invisible to LLMs | ✅ **Network Isolated** | **100% Dropped** (`internal: true` sandbox) |
-| **Container Escape / Privilege Escalation** | ❌ No host visibility | ⚠️ Handled via Falco | **eBPF Kernel Detection** (`cap_drop: ALL`) |
-| **Business Logic Flaws / Model Hallucinations** | ❌ Beyond security scope | ❌ Beyond security scope | Handled via Prompt engineering & Agent QA |
+| **Indirect Prompt Injection** *(PDF/Web hijacking tool execution)* | ❌ Easily fooled by LLM confusion | ✅ **Deterministic Block** | **Deterministic In-Band Fusing** (<1μs benchmarked bitmap match) |
+| **Rogue Tool Calling** *(Unauthorized DB write / Shell execution)* | ❌ Flawed application logic | ✅ **Cryptographic Block** | **100% Interception** within defined threat model & capability vector |
+| **Data Exfiltration** *(Plugin silently sending tokens to C2)* | ❌ Invisible to LLMs | ✅ **Network Isolated** | **100% Dropped** (`internal: true` sandbox topology) |
+| **Container Escape / Privilege Escalation** | ❌ No host visibility | ⚠️ Handled via Falco | **eBPF Kernel Detection** (`cap_drop: ALL` capability isolation) |
+| **Business Logic Flaws / Model Hallucinations** | ❌ Beyond security scope | ❌ Beyond security scope | Handled via Prompt engineering & Agent QA workflows |
 
 ---
 
@@ -149,12 +179,42 @@ The architecture and patent boundaries of DROS are established in **The DROS Aca
 
 通用型 **AI Agent 確定性運行期安全治理與微秒級熔斷微核心**。原生適配 **DeepSeek Harness (DSH)** 外掛，同時可作為 Docker 本地 Sidecar 守護 **AGY (Google Antigravity)、OpenAI Codex、Claude Code、Cursor 與 OpenClaw** 等各類 Agent。
 
+> 🎯 **核心架構定位（一句話拆解認知）：**  
+> **DSH 是 DROS 的社群入口；DROS 是跨 Agent 的執行治理層。**
+
+```text
+                 取得入口 (GET IT HERE)
+                    DSH 市集外掛
+                         │
+                         │ 渠道分發 (distribution)
+                         ▼
+                   DROS VajraClaw
+                         │
+                 部署形態 (DEPLOY IT HERE)
+                   Docker / Sidecar
+                         │
+       ┌─────────────────┼─────────────────┐
+       ▼                 ▼                 ▼
+      DSH               AGY              Codex ... (Claude, Cursor, OpenClaw)
+       │                 │                 │
+       └─────────────────┼─────────────────┘
+                         ▼
+                DROS 治理邊界 (Enforcement)
+                         │
+           ┌─────────────┼─────────────┐
+           ▼             ▼             ▼
+          MCP           API           CLI
+```
+
 ---
 
-> 🎁 **【個人開發者社群版：永久免費】**
+> 🎁 **【個人開發者社群版：多 Agent 工作站永久免費】**
 > 
-> * 🛡️ **個人使用 100% 永久免費**（支援本機跨多個 Agent 累計最多 **5 個並發 Agent**）。
-> * 🪪 **原生 W3C DID 密碼學指紋 (`RFC-010`)**：為每次 Tool 調用自動簽署去中心化身分，不可抵賴。
+> * 🛡️ **個人使用 100% 永久免費**（為本機多 Agent 工作站建立統一安全邊界，支援最多 **5 個並發 Agent**）。
+> * 🪪 **三層密碼學架構模型 (`RFC-010`)**：
+>   * **主體身分 (Identity)**：原生 W3C DID 金鑰綁定 (`did:key:z6Mku...`)。
+>   * **執行存證 (Evidence)**：每次 Tool 執行產生 Ed25519 數位簽章。
+>   * **不可否認追溯 (Accountability)**：防篡改之本機 JSON 審計存證鏈。
 > * ⚡ **Universal Docker 網關**：同時保護 DSH 外掛、MCP 服務器與各類終端 CLI Agent。
 
 ---
@@ -174,7 +234,7 @@ The architecture and patent boundaries of DROS are established in **The DROS Aca
                                ▼
 ┌─────────────────────────────────────────────────────────────┐
 │ 2. 運行期治理閘道 (Runtime Gateway: DROS VajraClaw)          │  <── 🏛️ 金庫守衛 (Execution Identity)
-│    - W3C DID 身分指紋 + 364ns 權限點陣查表                  │      未授權操作於 1 微秒內硬性物理熔斷！
+│    - W3C DID 身分指紋 + 364ns 權限點陣查表                  │      指定基準測試配置下執行路徑延遲 <1 μs！
 └──────────────────────────────┬──────────────────────────────┘
                                │ (放行合法的 Syscall / Egress 流量)
                                ▼
@@ -188,15 +248,15 @@ The architecture and patent boundaries of DROS are established in **The DROS Aca
 
 ## 🧭 治理邊界：DROS 守護什麼 vs. 不守護什麼
 
-為了維護極致嚴謹的工程界線，DROS 明確劃定防禦邊界：
+為了維護極致嚴謹的工程界線與防禦範疇，DROS 明確劃定邊界：
 
 | 攻擊手法與威脅情境 | 傳統語意 Guardrails | DROS VajraClaw 物理微核心 | 最終防禦效果 |
 | :--- | :---: | :---: | :--- |
-| **間接提示詞注入** *(網頁/PDF 夾帶指令詐騙 Agent 刪庫)* | ❌ LLM 語意混淆易被繞過 | ✅ **確定性攔截** | **100% 物理熔斷** (<1μs 點陣查表) |
-| **側向越權調用** *(未授權外掛偷偷呼叫 DB/付款 Tool)* | ❌ 應用層邏輯脆弱 | ✅ **密碼學阻斷** | **100% 阻斷** (W3C DID 權限綁定) |
-| **私自外發洩密** *(外掛私自連線外部 C2 傳輸機密)* | ❌ LLM 完全無感 | ✅ **網路微隔離** | **100% 丟包** (`internal: true` 沙盒) |
-| **容器逃逸與宿主機提權** | ❌ 無主機核心視角 | ⚠️ 協同 Falco eBPF | **核心層捕捉** (`cap_drop: ALL`) |
-| **業務邏輯錯誤與模型幻覺** | ❌ 超出資安範疇 | ❌ 超出資安範疇 | 屬 LLM 生成品質，由 Prompt 工程優化 |
+| **間接提示詞注入** *(網頁/PDF 夾帶指令詐騙 Agent 刪庫)* | ❌ LLM 語意混淆易被繞過 | ✅ **確定性攔截** | **確定性帶內物理熔斷** (<1μs 基準測試點陣查表) |
+| **側向越權調用** *(未授權外掛偷偷呼叫 DB/付款 Tool)* | ❌ 應用層邏輯脆弱 | ✅ **密碼學阻斷** | **100% 阻斷** (在定義之威脅模型與 Capability 向量內) |
+| **私自外發洩密** *(外掛私自連線外部 C2 傳輸機密)* | ❌ LLM 完全無感 | ✅ **網路微隔離** | **100% 丟包** (`internal: true` 沙盒拓撲) |
+| **容器逃逸與宿主機提權** | ❌ 無主機核心視角 | ⚠️ 協同 Falco eBPF | **核心層捕捉** (`cap_drop: ALL` 特權剝奪隔離) |
+| **業務邏輯錯誤與模型幻覺** | ❌ 超出資安範疇 | ❌ 超出資安範疇 | 屬 LLM 生成品質，由 Prompt 工程與 QA 流程優化 |
 
 ---
 
