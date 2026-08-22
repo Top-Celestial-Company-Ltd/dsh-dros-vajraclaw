@@ -152,8 +152,12 @@ docker run -d -p 8080:8080 --name dros-gateway dros/hacker-gateway:v1.0.0
   ```bash
   dsh plugin --profile web add dsh-plugin-vajraclaw
   ```
-* **For AGY / Codex / Python SDK**:
-  Set environment variable `DROS_GATEWAY_URL=http://localhost:8080` in your MCP or agent runtime.
+* **For AGY / Codex / Claude Code / Cursor / Python SDK**:
+  Connect and protect your local agents instantly with just two environment variables:
+  ```bash
+  export DROS_GATEWAY_URL="http://localhost:8080"
+  export DROS_IDENTITY_SEED="0x1a2b3c4d..." # Your local Ed25519 seed hex
+  ```
 
 👉 **[📖 Read the Advanced SecOps Guide (docs/ADVANCED_SECOPS_GUIDE.md)](docs/ADVANCED_SECOPS_GUIDE.md)** for `internal: true` network isolation, Falco eBPF, and Wazuh integration templates.
 
@@ -161,8 +165,8 @@ docker run -d -p 8080:8080 --name dros-gateway dros/hacker-gateway:v1.0.0
 
 ## 📜 Academic Papers & Whitepapers
 The architecture and patent boundaries of DROS are established in **The DROS Academic Trilogy**:
-1. **DROS-6P**: *A Unified Deterministic Runtime Governance Architecture Closing the Six Fundamental Trust Boundaries of Enterprise AI Agents* ([DOI: 10.5281/zenodo.21808499](https://doi.org/10.5281/zenodo.21808499))
-2. **DROS 4-Layer**: *DROS 4-Layer Defense-in-Depth Architecture for Autonomous AI Workloads* ([DOI: 10.5281/zenodo.21755654](https://doi.org/10.5281/zenodo.21755654))
+1. **DROS-6P**: *A Unified Deterministic Runtime Governance Architecture Closing the Six Fundamental Trust Boundaries of Enterprise AI Agents* ([DOI: 10.5281/zenodo.21833970](https://doi.org/10.5281/zenodo.21833970) | [Record: 21833970](https://zenodo.org/records/21833970))
+2. **DROS 4-Layer**: *DROS 4-Layer Defense-in-Depth Architecture for Autonomous AI Workloads* ([DOI: 10.5281/zenodo.21903475](https://doi.org/10.5281/zenodo.21903475) | [Record: 21903475](https://zenodo.org/records/21903475))
 3. **DROS-PGM**: *Runtime Attribution Framework: An External C-ABI and PKI-Based Zero-Trust Infrastructure for Non-Repudiable Execution Governance in Multi-Agent Systems* ([DOI: 10.5281/zenodo.21903687](https://doi.org/10.5281/zenodo.21903687) | [Record: 21903687](https://zenodo.org/records/21903687))
 
 ---
@@ -309,8 +313,12 @@ docker run -d -p 8080:8080 --name dros-gateway dros/hacker-gateway:v1.0.0
   ```bash
   dsh plugin --profile web add dsh-plugin-vajraclaw
   ```
-* **AGY / Codex / Python SDK 使用者**：
-  設定環境變數 `DROS_GATEWAY_URL=http://localhost:8080` 即可受 DROS 守護。
+* **AGY / Codex / Claude Code / Cursor / Python SDK 使用者**：
+  僅需配置兩行環境變數，即可立即將本機 Agent 納入 DROS 微秒級執行治理與 W3C DID 存證邊界：
+  ```bash
+  export DROS_GATEWAY_URL="http://localhost:8080"
+  export DROS_IDENTITY_SEED="0x1a2b3c4d..." # 本機專屬 Ed25519 私鑰種子 Hex
+  ```
 
 👉 **[📖 閱讀進階資安與多 Agent 拓撲加固手冊 (docs/ADVANCED_SECOPS_GUIDE.md)](docs/ADVANCED_SECOPS_GUIDE.md)**（獲取 `internal: true` 網路微隔離 Compose 範本、Falco eBPF 核心防逃逸與 Wazuh SIEM 整合指南）。
 
@@ -322,11 +330,11 @@ docker run -d -p 8080:8080 --name dros-gateway dros/hacker-gateway:v1.0.0
 
 1. 🏛️ **Paper 1: DROS-6P (企業信任與六大邊界治理)**
    * *DROS-6P: A Unified Deterministic Runtime Governance Architecture Closing the Six Fundamental Trust Boundaries of Enterprise AI Agents*
-   * **Zenodo DOI**: [`10.5281/zenodo.21808499`](https://doi.org/10.5281/zenodo.21808499) | **Record**: [zenodo.org/records/21808499](https://zenodo.org/records/21808499)
+   * **Zenodo DOI**: [`10.5281/zenodo.21833970`](https://doi.org/10.5281/zenodo.21833970) | **Record**: [zenodo.org/records/21833970](https://zenodo.org/records/21833970)
 
 2. 🏛️ **Paper 2: DROS 4-Layer (四層深度防禦縱深架構)**
    * *DROS 4-Layer Defense-in-Depth Architecture for Autonomous AI Workloads*
-   * **Zenodo DOI**: [`10.5281/zenodo.21755654`](https://doi.org/10.5281/zenodo.21755654) | **Record**: [zenodo.org/records/21755654](https://zenodo.org/records/21755654)
+   * **Zenodo DOI**: [`10.5281/zenodo.21903475`](https://doi.org/10.5281/zenodo.21903475) | **Record**: [zenodo.org/records/21903475](https://zenodo.org/records/21903475)
 
 3. 🏛️ **Paper 3: DROS-PGM (實體防護模組與不可否認性運行期歸責)**
    * *Runtime Attribution Framework: An External C-ABI and PKI-Based Zero-Trust Infrastructure for Non-Repudiable Execution Governance in Multi-Agent Systems*

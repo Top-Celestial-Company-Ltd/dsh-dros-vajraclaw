@@ -1,6 +1,6 @@
 {
   "name": "dsh-plugin-vajraclaw",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Deterministic Runtime Execution Governance & Security Circuit-Breaker for DSH Agents",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
