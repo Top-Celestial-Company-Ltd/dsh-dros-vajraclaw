@@ -130,13 +130,11 @@ graph TD
 
 ---
 
-## 📊 DROS Product Tiers & 6-Pillar Security Feature Matrix
+> 💡 **For the latest pricing and tiers, please visit the [Official Website (dr-os.io)](https://dr-os.io).**
 
 | Feature / 6-Pillar Dimension | 🟢 Hacker / Community (Free) | 🔵 Startup | 🟣 Enterprise | 👑 Sovereign |
 | :--- | :---: | :---: | :---: | :---: |
 | **Target Audience** | **Individual Devs / Local Multi-Agent** | 10~50 Dev Teams | Enterprises / Listed Co. | Banking / Defense / Gov |
-| **Price (USD)** | **100% Free ($0)** | **$1,990 / yr** | **$19,990 / yr** | **Contact Sales** |
-| **Per-Agent Cost** | **$0** | **~$5.5 / mo** | **~$3.7 / mo** | Custom |
 | **Machine UUID Limit** | **1 UUID** | 3 UUIDs | 15 UUIDs | **Unlimited** |
 | **Concurrent Agents** | **5 Concurrent Agents** | 30 Agents | 450 Agents | **Unlimited (Swarm)** |
 | **Pillar 1: Principal (W3C DID)** | ✅ **Native W3C `did:key`** | ✅ **3-Tier PKI DIT** | ✅ **Cross-Domain BEC Issuance** | ✅ Hardware Dongle |
