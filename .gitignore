@@ -1,0 +1,4 @@
+.dros-audit
+.dros-test-audit
+node_modules
+dist/test

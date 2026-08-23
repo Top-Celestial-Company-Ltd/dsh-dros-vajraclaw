@@ -1,18 +1,30 @@
 # ⚡ DROS™ VajraClaw for DSH & Multi-Agent Workstations
-### DSH Agent 確定性執行治理、微秒級安全熔斷與 W3C DID 身分外掛
+### DSH 原生外掛 + 跨 Agent 確定性執行治理與微秒級安全熔斷微核心 (v2.0)
 
 [![Official Website](https://img.shields.io/badge/官方網站-dr--os.io-purple.svg?style=for-the-badge)](https://dr-os.io)
-[![DSH Compatible](https://img.shields.io/badge/DSH-Compatible-success)](https://github.com/deepseek-ai/dsh)
+[![DSH Compatible](https://img.shields.io/badge/DSH-Cordis_Native-success)](https://github.com/deepseek-ai/dsh)
 [![npm version](https://img.shields.io/npm/v/dsh-plugin-vajraclaw.svg)](https://www.npmjs.com/package/dsh-plugin-vajraclaw)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![W3C DID](https://img.shields.io/badge/RFC--010-W3C_DID_Native-green.svg)](#)
 [![Patent Status](https://img.shields.io/badge/U.S._Patent-64%2F111%2C973-blue.svg)](#)
 
 [English](https://github.com/Top-Celestial-Company-Ltd/dsh-dros-vajraclaw/blob/main/README.md) | [繁體中文](https://github.com/Top-Celestial-Company-Ltd/dsh-dros-vajraclaw/blob/main/README_zh.md) | [🌐 官方網站 (dr-os.io)](https://dr-os.io)
 
-通用型 **AI Agent 確定性運行期安全治理與微秒級熔斷微核心**。原生適配 **DeepSeek Harness (DSH)** 外掛，同時可作為 Docker 本地 Sidecar 守護 **AGY (Google Antigravity)、OpenAI Codex、Claude Code、Cursor 與 OpenClaw** 等各類 Agent。
+通用型 **AI Agent 確定性運行期安全治理與微秒級熔斷微核心**。完美相容 **DeepSeek Harness (DSH)** Cordis 微核心插件架構，同時提供「嵌入式本地引擎」與「全域 Docker 網關」雙模式，守護 **AGY (Google Antigravity)、OpenAI Codex、Claude Code、Cursor 與 OpenClaw** 等各類 Agent。
 
-> 🎯 **核心架構定位（一句話拆解認知）：**  
-> **DSH 是 DROS 的社群入口；DROS 是跨 Agent 的執行治理層。**
+---
+
+## 💡 雙模架構設計 (Dual-Mode Architecture)
+
+DROS VajraClaw 採用創新的「內外兼修」雙軌治理架構：
+
+* **模式 1：DSH 嵌入式本地治理 (Embedded Mode, 免 Docker)**：
+  * 透過 Cordis `apply(ctx, config)` 原生掛載在 DSH 內。
+  * 內建 TypeScript 確定性規則庫、W3C DID 產生器與本地 Merkle 審計日誌。
+  * 預設 **Fail-Open (Fail-Safe)**，絕不破壞宿主 DSH 工具調用，一鍵安裝立即享有本地安全防護！
+* **模式 2：全工作站多 Agent 網關模式 (Gateway Mode)**：
+  * 當本機啟動了 DROS Universal Docker (`localhost:8080`) 時，外掛自動將治理策略與審計鏈向上對齊至 Gateway。
+  * 同時 AGY、Codex、Claude Code 也連向 8080 共享同一防禦邊界！
 
 ```text
                  取得入口 (GET IT HERE)

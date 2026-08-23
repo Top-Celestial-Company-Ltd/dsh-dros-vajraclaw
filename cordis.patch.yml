@@ -1,3 +1,10 @@
-
-ŠİŠÃåº§=«\„Æ§‰÷¬µú+’U¨ëh)ZÂ']®‹/j:ÚrV°‚‹Ş®v§qéÚ™çl†™n‚)ïj:ÚrV°r‰ßŠ§i¹^fŞu×x"ëk¹ë-®'-¨¥
-Z,y×Ú–Ç j×°k%+–m§ÿå¡Æ¥†‹-óO4jçb´º *İ®‹¹Ø­
+# DROS VajraClaw Cordis Bundle Patch
+# Mounts the deterministic agent runtime governance plugin into a DSH profile composition.
+- insert:
+    - id: dros-vajraclaw
+      name: dsh-plugin-vajraclaw
+      config:
+        enableEmbeddedEngine: true
+        strictFailClosed: false
+        gatewayUrl: http://localhost:8080
+        auditLogDir: .dros-audit

@@ -95,7 +95,7 @@
   "scripts": {
     "build": "node ./node_modules/typescript/bin/tsc -p tsconfig.json",
     "prepublishOnly": "npm run build",
-    "test": "node ./node_modules/typescript/bin/tsc -p tsconfig.json && node dist/test/plugin.test.js"
+    "test": "node ./node_modules/typescript/bin/tsc -p tsconfig.json && node test/run_tests.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.2.0",
@@ -105,8 +105,6 @@
     "@deepseek-ai/cordis": "^4.0.0 || ^4.0.1"
   },
   "dependencies": {
-    "cordis": "^4.0.0-rc.8",
-    "rain": "*",
     "zod": "^3.25.76"
   }
 }

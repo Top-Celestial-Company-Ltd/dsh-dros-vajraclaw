@@ -40,5 +40,7 @@ const logContent = fs.readFileSync(auditFile, 'utf8');
 console.assert(logContent.includes('BLOCK') && logContent.includes('did:key:z6Mku'), 'Audit log entry corrupt');
 console.log('[PASS] Test 5: Local Cryptographic Audit Chain Verified');
 // Cleanup test dir
-fs.rmSync(testAuditDir, { recursive: true, force: true });
+if (fs.existsSync(testAuditDir)) {
+    fs.rmSync(testAuditDir, { recursive: true, force: true });
+}
 console.log('=== All 5 Unit Tests Passed Successfully! ===');
