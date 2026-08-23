@@ -1,123 +1,81 @@
-/**
- * DROS Agent Governance Plugin for DSH (DeepSeek Harness)
- * --------------------------------------------------------
- * Intercepts tool calls and evaluates deterministic policies via DROS Gateway (Docker).
- */
+import { Context } from 'cordis';
+import { z } from 'zod';
+import { DrosEmbeddedEngine, EvaluationRequest, EvaluationResult } from './engine.js';
+import { DrosAuditLogger } from './audit.js';
 
-export interface DrosPluginSettings {
-  gatewayUrl: string;
-  licenseKey?: string;
-  strictFailClosed: boolean;
-}
+export const name = 'dsh-plugin-vajraclaw';
 
-export interface ToolCallContext {
-  tool: string;
-  args: Record<string, any>;
-  agentId?: string;
-  sessionId?: string;
-}
+export const ConfigSchema = z.object({
+  gatewayUrl: z.string().default('http://localhost:8080'),
+  enableEmbeddedEngine: z.boolean().default(true),
+  strictFailClosed: z.boolean().default(false),
+  licenseKey: z.string().optional().default(''),
+  auditLogDir: z.string().default('.dros-audit')
+});
 
-export interface DrosEvaluationResponse {
-  decision: "ALLOW" | "BLOCK";
-  tool: string;
-  agent_id: string;
-  reason: string;
-  latency_us?: number;
-}
+export type Config = z.infer<typeof ConfigSchema>;
 
-export class DrosDshPlugin {
-  private settings: DrosPluginSettings;
+export function apply(ctx: Context, config: Config) {
+  const engine = new DrosEmbeddedEngine();
+  const logger = new DrosAuditLogger(config.auditLogDir);
+  const loggerService = (ctx as any).logger ? (ctx as any).logger('dros-governance') : console;
 
-  constructor(settings?: Partial<DrosPluginSettings>) {
-    this.settings = {
-      gatewayUrl: settings?.gatewayUrl || "http://localhost:8080",
-      licenseKey: settings?.licenseKey || "",
-      strictFailClosed: settings?.strictFailClosed ?? true,
-    };
-  }
+  loggerService.info?.('[DROS VajraClaw] Initializing Deterministic Agent Runtime Governance layer...');
+  loggerService.info?.('[DROS VajraClaw] Bound Identity: ' + engine.getDID());
 
-  /**
-   * DSH Lifecycle Hook: Called before any Agent executes a Tool Call
-   */
-  async beforeToolCall(context: ToolCallContext): Promise<{ proceed: boolean; error?: string }> {
-    const { tool, args, agentId = "dsh-agent" } = context;
+  // Intercept beforeToolCall / tool evaluation via Cordis event bus
+  (ctx as any).on('tool/call', async (data: any) => {
+    const tool = data?.name || data?.tool || 'unknown-tool';
+    const args = data?.args || data?.arguments || {};
+    const agentId = data?.agentId || 'dsh-agent';
 
-    try {
-      const response = await fetch(`${this.settings.gatewayUrl}/evaluate`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(this.settings.licenseKey ? { "Authorization": `Bearer ${this.settings.licenseKey}` } : {}),
-        },
-        body: JSON.stringify({
-          tool,
-          args,
-          agent_id: agentId,
-        }),
-      });
+    const req: EvaluationRequest = { tool, args, agentId };
 
-      if (!response.ok) {
-        if (this.settings.strictFailClosed) {
-          return {
-            proceed: false,
-            error: `[DROS Security Gateway] Gateway returned HTTP ${response.status}. Strict Fail-Closed enforced.`,
-          };
+    let evaluated = false;
+    if (config.gatewayUrl) {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 1500);
+
+        const res = await fetch(config.gatewayUrl + '/evaluate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(config.licenseKey ? { 'Authorization': 'Bearer ' + config.licenseKey } : {})
+          },
+          body: JSON.stringify(req),
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+
+        if (res.ok) {
+          const remoteData = (await res.json()) as EvaluationResult;
+          logger.record(remoteData, agentId);
+          evaluated = true;
+
+          if (remoteData.decision === 'BLOCK') {
+            loggerService.warn?.('[DROS Circuit-Breaker] Blocked tool ' + tool + ': ' + remoteData.reason);
+            if (data.abort) data.abort(new Error('[DROS Physical Interception] ' + remoteData.reason));
+            return;
+          }
         }
-        return { proceed: true };
+      } catch (err: any) {
+        if (config.strictFailClosed) {
+          loggerService.error?.('[DROS Strict-Failsafe] Gateway unreachable at ' + config.gatewayUrl + '. Blocking execution.');
+          if (data.abort) data.abort(new Error('[DROS Strict-Failsafe] Gateway unreachable. Execution blocked.'));
+          return;
+        }
       }
-
-      const data = (await response.json()) as DrosEvaluationResponse;
-
-      if (data.decision === "BLOCK") {
-        return {
-          proceed: false,
-          error: `[DROS Physical Interception] Tool '${tool}' was blocked by policy. Reason: ${data.reason}`,
-        };
-      }
-
-      // Allowed
-      return { proceed: true };
-    } catch (err: any) {
-      if (this.settings.strictFailClosed) {
-        return {
-          proceed: false,
-          error: `[DROS Failsafe] Failed to reach DROS Gateway at ${this.settings.gatewayUrl}. Execution blocked (Strict Fail-Closed).`,
-        };
-      }
-      return { proceed: true };
     }
-  }
 
-  /**
-   * Activate Gumroad License
-   */
-  async activateLicense(key: string): Promise<{ success: boolean; message: string }> {
-    try {
-      const res = await fetch(`${this.settings.gatewayUrl}/api/license/activate`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ license_key: key }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        this.settings.licenseKey = key;
-        return { success: true, message: data.message };
+    if (!evaluated && config.enableEmbeddedEngine) {
+      const localResult = engine.evaluate(req);
+      logger.record(localResult, agentId);
+
+      if (localResult.decision === 'BLOCK') {
+        loggerService.warn?.('[DROS Embedded Fuse] Blocked tool ' + tool + ': ' + localResult.reason);
+        if (data.abort) data.abort(new Error('[DROS Embedded Fuse] ' + localResult.reason));
       }
-      return { success: false, message: data.error || "Activation failed" };
-    } catch (e: any) {
-      return { success: false, message: e.message };
     }
-  }
-}
-
-// Default export for DSH loader
-export default function initDrosPlugin(config: DrosPluginSettings) {
-  const plugin = new DrosDshPlugin(config);
-  return {
-    id: "celestial.dros.guard",
-    name: "DROS Agent Governance",
-    hooks: {
-      beforeToolCall: (ctx: ToolCallContext) => plugin.beforeToolCall(ctx),
-    },
-  };
+  });
 }

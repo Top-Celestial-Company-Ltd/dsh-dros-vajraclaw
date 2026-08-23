@@ -1,9 +1,18 @@
 {
   "name": "dsh-plugin-vajraclaw",
-  "version": "1.2.0",
-  "description": "Deterministic Runtime Execution Governance & Security Circuit-Breaker for DSH Agents",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "version": "2.0.0",
+  "description": "Deterministic Runtime Execution Governance & Security Circuit-Breaker for DSH & Multi-Agent Workstations",
+  "type": "module",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "default": "./dist/src/index.js"
+    },
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
   "keywords": [
     "dsh",
     "dsh-plugin",
@@ -25,7 +34,7 @@
     "rfc-010"
   ],
   "author": "Top-Celestial Company Ltd. / Jimmy Chen <service@dr-os.io>",
-  "license": "SEE LICENSE IN https://dr-os.io",
+  "license": "Apache-2.0",
   "homepage": "https://dr-os.io",
   "repository": {
     "type": "git",
@@ -34,51 +43,70 @@
   "dsh": {
     "displayName": "DROS™ VajraClaw - Agent Governance",
     "id": "celestial.dros.vajraclaw",
-    "version": "1.0.0",
-    "bundle": "dist/index.js",
+    "version": "2.0.0",
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
     "category": "security",
     "icon": "shield-check",
-    "description": "Microsecond O(1) Tool-Call Enforcement & Prompt Injection Interception Gateway for DSH",
+    "description": "Embedded & Gateway Dual-Mode Microsecond Execution Governance for DSH & Multi-Agent Environments",
     "profiles": [
       "web",
       "tui",
-      "eval"
+      "eval",
+      "default"
     ],
     "settings": {
-      "gatewayUrl": {
-        "type": "string",
-        "title": "DROS Gateway Endpoint",
-        "default": "http://localhost:8080",
-        "description": "The URL of the local or remote DROS Gateway Docker Container."
-      },
-      "licenseKey": {
-        "type": "string",
-        "title": "Gumroad License Key",
-        "default": "",
-        "description": "Enter your Hacker / Startup / Enterprise License Key to unlock higher concurrency."
+      "enableEmbeddedEngine": {
+        "type": "boolean",
+        "title": "Enable Embedded Engine",
+        "default": true,
+        "description": "Enable zero-latency local deterministic circuit-breaker and W3C DID binding without Docker requirements."
       },
       "strictFailClosed": {
         "type": "boolean",
         "title": "Strict Fail-Closed Mode",
-        "default": true,
-        "description": "Block tool execution if DROS Gateway is unreachable."
+        "default": false,
+        "description": "When false (default), fallback gracefully to embedded local engine if external Gateway is unreachable."
+      },
+      "gatewayUrl": {
+        "type": "string",
+        "title": "DROS Gateway Endpoint",
+        "default": "http://localhost:8080",
+        "description": "Optional URL for DROS Universal Docker Gateway to synchronize governance across AGY, Codex, and Claude."
+      },
+      "licenseKey": {
+        "type": "string",
+        "title": "Gumroad Commercial License Key",
+        "default": "",
+        "description": "Optional commercial license key for enterprise cluster scaling."
       }
     }
   },
   "files": [
     "dist",
     "src",
+    "cordis.patch.yml",
     "README.md",
     "README_zh.md",
-    "docs"
+    "docs",
+    "LICENSE"
   ],
   "scripts": {
-    "build": "node ./node_modules/typescript/bin/tsc --declaration --outDir dist src/index.ts",
+    "build": "node ./node_modules/typescript/bin/tsc -p tsconfig.json",
     "prepublishOnly": "npm run build",
-    "test": "echo \"Running plugin tests...\" && exit 0"
+    "test": "node ./node_modules/typescript/bin/tsc -p tsconfig.json && node dist/test/plugin.test.js"
   },
   "devDependencies": {
     "@types/node": "^26.2.0",
     "typescript": "^7.0.2"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.0 || ^4.0.1"
+  },
+  "dependencies": {
+    "cordis": "^4.0.0-rc.8",
+    "rain": "*",
+    "zod": "^3.25.76"
   }
 }
