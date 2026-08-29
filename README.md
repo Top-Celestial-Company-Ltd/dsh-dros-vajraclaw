@@ -172,19 +172,40 @@ docker run -d -p 8080:8080 --name dros-gateway dros/hacker-gateway:v1.0.0
 
 ---
 
-## 📜 Academic Papers & Whitepapers
-The architecture and patent boundaries of DROS are established in **The DROS Academic Trilogy**:
-1. **DROS-6P**: *A Unified Deterministic Runtime Governance Architecture Closing the Six Fundamental Trust Boundaries of Enterprise AI Agents* ([DOI: 10.5281/zenodo.21833970](https://doi.org/10.5281/zenodo.21833970) | [Record: 21833970](https://zenodo.org/records/21833970))
-2. **DROS 4-Layer**: *DROS 4-Layer Defense-in-Depth Architecture for Autonomous AI Workloads* ([DOI: 10.5281/zenodo.21903475](https://doi.org/10.5281/zenodo.21903475) | [Record: 21903475](https://zenodo.org/records/21903475))
-3. **DROS-PGM**: *Runtime Attribution Framework: An External C-ABI and PKI-Based Zero-Trust Infrastructure for Non-Repudiable Execution Governance in Multi-Agent Systems* ([DOI: 10.5281/zenodo.21903687](https://doi.org/10.5281/zenodo.21903687) | [Record: 21903687](https://zenodo.org/records/21903687))
+## 📜 Technical Foundations & Benchmark Sandboxes
+
+The deterministic runtime governance, microsecond circuit-breaking, and cryptographic audit mechanisms implemented in this project are grounded in the following academic research and open-source benchmark environments:
+
+1. **Core Architecture & Six Fundamental Boundaries**:
+   * *DROS-6P: A Unified Deterministic Runtime Governance Architecture Closing the Six Fundamental Trust Boundaries of Enterprise AI Agents*
+   * **Zenodo DOI**: [`10.5281/zenodo.21833970`](https://doi.org/10.5281/zenodo.21833970) | **Archival Record**: [zenodo.org/records/21833970](https://zenodo.org/records/21833970)
+
+2. **Defense-in-Depth Substrate (4-Layer Model)**:
+   * *DROS 4-Layer Defense-in-Depth Architecture for Autonomous AI Workloads*
+   * **Zenodo DOI**: [`10.5281/zenodo.21903475`](https://doi.org/10.5281/zenodo.21903475) | **Archival Record**: [zenodo.org/records/21903475](https://zenodo.org/records/21903475)
+
+3. **External C-ABI & Non-Repudiable Attribution (PGM)**:
+   * *Runtime Attribution Framework: An External C-ABI and PKI-Based Zero-Trust Infrastructure for Non-Repudiable Execution Governance in Multi-Agent Systems*
+   * **Zenodo DOI**: [`10.5281/zenodo.21903687`](https://doi.org/10.5281/zenodo.21903687) | **Archival Record**: [zenodo.org/records/21903687](https://zenodo.org/records/21903687)
+
+4. **Open Technical Standard & Verification Benchmark**:
+   * **RFC-010 Standard**: Compliant with Open Agent Passport & Evidence Specification (W3C DID `did:key` & Ed25519 signature chain).
+   * **Benchmark Testbed**: [DROS-VEP Lite (Reproducible Security Sandbox)](https://github.com/Top-Celestial-Company-Ltd/DROS-VEP-lite)
+   * **Empirical Report**: 24-hour continuous multi-scenario soak test report (160,611 requests verified at 26.1μs decision latency).
 
 ---
 
 ## 🏛️ Official Organization & Contact Information
-* **Company**: Top-Celestial Company Ltd. (康宸園有限公司)
+* **Publishing Entity**: Top-Celestial Company Ltd. (康宸園有限公司)
 * **Official Website**: [https://dr-os.io](https://dr-os.io)
-* **Support & Inquiries**: [service@dr-os.io](mailto:service@dr-os.io)
+* **Customer Support & Inquiries**: [service@dr-os.io](mailto:service@dr-os.io)
 * **GitHub Organization**: [https://github.com/Top-Celestial-Company-Ltd](https://github.com/Top-Celestial-Company-Ltd)
+
+---
+
+## 📄 Patent & Legal Notices
+**Patent Notice:** DROS deterministic runtime execution governance and in-band interception technology is protected under U.S. Provisional Patent Application (U.S. PPA No. 64/111,973, Patent Pending). All commercial rights reserved by Top-Celestial Company Ltd.
+
 
 ---
 
@@ -333,37 +354,38 @@ docker run -d -p 8080:8080 --name dros-gateway dros/hacker-gateway:v1.0.0
 
 ---
 
-## 📜 Technical Foundations & Benchmark Sandboxes
+## 📜 相關技術核心論文與實測驗證 (Technical Foundations & Benchmarks)
 
-The deterministic runtime governance, microsecond circuit-breaking, and cryptographic audit mechanisms implemented in this project are grounded in the following academic research and open-source benchmark environments:
+本專案之確定性執行治理、微秒級熔斷與密碼學存證機制，參考並延伸自以下核心技術論文與開源實測環境：
 
-1. **Core Architecture & Six Fundamental Boundaries**:
+1. **核心架構與六大信任邊界 (Core Architecture)**:
    * *DROS-6P: A Unified Deterministic Runtime Governance Architecture Closing the Six Fundamental Trust Boundaries of Enterprise AI Agents*
-   * **Zenodo DOI**: [`10.5281/zenodo.21833970`](https://doi.org/10.5281/zenodo.21833970) | **Archival Record**: [zenodo.org/records/21833970](https://zenodo.org/records/21833970)
+   * **Zenodo DOI**: [`10.5281/zenodo.21833970`](https://doi.org/10.5281/zenodo.21833970) | **記錄典藏**: [zenodo.org/records/21833970](https://zenodo.org/records/21833970)
 
-2. **Defense-in-Depth Substrate (4-Layer Model)**:
+2. **四層深度防禦架構 (Defense-in-Depth Model)**:
    * *DROS 4-Layer Defense-in-Depth Architecture for Autonomous AI Workloads*
-   * **Zenodo DOI**: [`10.5281/zenodo.21903475`](https://doi.org/10.5281/zenodo.21903475) | **Archival Record**: [zenodo.org/records/21903475](https://zenodo.org/records/21903475)
+   * **Zenodo DOI**: [`10.5281/zenodo.21903475`](https://doi.org/10.5281/zenodo.21903475) | **記錄典藏**: [zenodo.org/records/21903475](https://zenodo.org/records/21903475)
 
-3. **External C-ABI & Non-Repudiable Attribution (PGM)**:
+3. **外掛 FFI 與不可否認存證模組 (Runtime Attribution Framework)**:
    * *Runtime Attribution Framework: An External C-ABI and PKI-Based Zero-Trust Infrastructure for Non-Repudiable Execution Governance in Multi-Agent Systems*
-   * **Zenodo DOI**: [`10.5281/zenodo.21903687`](https://doi.org/10.5281/zenodo.21903687) | **Archival Record**: [zenodo.org/records/21903687](https://zenodo.org/records/21903687)
+   * **Zenodo DOI**: [`10.5281/zenodo.21903687`](https://doi.org/10.5281/zenodo.21903687) | **記錄典藏**: [zenodo.org/records/21903687](https://zenodo.org/records/21903687)
 
-4. **Open Technical Standard & Verification Benchmark**:
-   * **RFC-010 Standard**: Compliant with Open Agent Passport & Evidence Specification (W3C DID `did:key` & Ed25519 signature chain).
-   * **Benchmark Testbed**: [DROS-VEP Lite (Reproducible Security Sandbox)](https://github.com/Top-Celestial-Company-Ltd/DROS-VEP-lite)
-   * **Empirical Report**: 24-hour continuous multi-scenario soak test report (160,611 requests verified at 26.1μs decision latency).
-
----
-
-## 🏛️ Official Organization & Contact Information
-* **Publishing Entity**: Top-Celestial Company Ltd. (康宸園有限公司)
-* **Official Website**: [https://dr-os.io](https://dr-os.io)
-* **Customer Support & Inquiries**: [service@dr-os.io](mailto:service@dr-os.io)
-* **GitHub Organization**: [https://github.com/Top-Celestial-Company-Ltd](https://github.com/Top-Celestial-Company-Ltd)
+4. **開源技術標準與實測基準倉 (Open Standard & Verification Sandbox)**:
+   * **RFC-010 規範**: 遵循開放 Agent 身分與存證規範（W3C DID `did:key` 與 Ed25519 簽章鏈）。
+   * **實測基準環境**: [DROS-VEP Lite (可復現安全評測沙盒)](https://github.com/Top-Celestial-Company-Ltd/DROS-VEP-lite)
+   * **實測報告**: 涵蓋 24 小時長效多場景測試數據（160,611 次請求驗證，決策延遲 26.1μs）。
 
 ---
 
-## 📄 Patent & Legal Notices
-**Patent Notice:** DROS deterministic runtime execution governance and in-band interception technology is protected under U.S. Provisional Patent Application (U.S. PPA No. 64/111,973, Patent Pending). All commercial rights reserved by Top-Celestial Company Ltd.
+## 🏛️ 官方發行組織與聯繫資訊 (Official Contact)
+* **發行主體**：Top-Celestial Company Ltd. (康宸園有限公司)
+* **官方網站**：[https://dr-os.io](https://dr-os.io)
+* **客戶服務與商務諮詢**：[service@dr-os.io](mailto:service@dr-os.io)
+* **GitHub 官方組織**：[https://github.com/Top-Celestial-Company-Ltd](https://github.com/Top-Celestial-Company-Ltd)
+
+---
+
+## 📄 專利與法律聲明
+**專利聲明：** DROS 執行治理與安全技術已申請美國臨時專利保護（U.S. Provisional Patent Application No. 64/111,973，Patent Pending）。
+
 
