@@ -112,44 +112,53 @@ DROS 嚴格貫徹 **零信任密碼學架構**：
 
 DROS 雖以 DSH 外掛形式提供一鍵安裝，但底層是 **標準化 Docker 容器 (`localhost:8080`)**，單台開發機可同時守護多個不同平台的活躍 Agent（共用 5 個並發配額）：
 
-* **DSH 使用者** ➔ 透過 `dsh-plugin-vajraclaw` 接入。
-* **Google Antigravity (AGY)** ➔ 透過 MCP 網關或 Python SDK 接入。
-* **OpenAI Codex / Claude Code / Cursor** ➔ 透過本地 REST API / Hook 攔截接入。
+## 📊 雙模式防禦對照矩陣（純外掛單機版 vs. Docker 網關版）
+ 
+| 防護機制與能力維度 | 📦 模式 A：純外掛單機版 (預設) | ⚡ 模式 B：DROS Docker 網關版 (選配) |
+| :--- | :---: | :---: |
+| **運行載體** | 純 TypeScript（DSH 進程內，零外部依賴） | 本機 Docker 容器 (`localhost:8080`) |
+| **支援治理之 Agent** | 專屬保護 DeepSeek Harness (DSH) | 同時聯防 DSH + Google AGY + Codex + Claude + Cursor |
+| **主體身分認證 (Identity)** | 進程綁定 Agent ID | **原生 W3C `did:key` (Ed25519) 密碼學身分** |
+| **工具執行閘門 (Gate)** | **強韌正規表達式 Shell 與機密檔案安全閥** | **確定性 AST 點陣圖策略引擎 (<1μs)** |
+| **不可否認性審計鏈** | 持久化 SHA-256 雜湊鏈 JSONL (本地磁碟) | **Ed25519 數位簽章 Merkle 雜湊鏈** |
+| **RFC-010 開放護照格式** | 標準護照格式解析 | **本地完整簽署發放與跨 Agent 交互認證** |
+| **執行期開銷** | 0 ms（記憶體事件直接攔截） | <1 ms（本機 Loopback HTTP / C-ABI） |
+| **授權方式** | **永久完全免費 (Apache-2.0 開源)** | **個人 Hacker / 社群永久免費授權** |
 
 ---
 
 ## 🚀 極速上手 (Quick Start)
- 
-+### 模式 A：標準單機模式（預設，零依賴，無需 Docker）
-+直接在 DSH 中安裝外掛，即刻啟用高危指令攔截、敏感檔案保護與本地審計鏈：
-+```bash
-+dsh plugin --profile web add dsh-plugin-vajraclaw
-+```
-+*(100% 在 DSH 進程內運作，無額外網路開銷，開箱即用)*
-+
-+---
-+
-+### 模式 B：進階多 Agent 工作站模式（選配，啟用 Docker 網關）
-+若您需要跨平台同時守護多個 Agent（DSH + Google AGY + Codex + Claude Code + Cursor），並啟用 **原生 W3C `did:key` 身分指紋、RFC-010 護照與微秒級 AST 策略查表**：
-+
-+1. **啟動免費版 DROS Docker 網關**：
-+   ```bash
-+   docker run -d -p 8080:8080 --name dros-gateway dros/hacker-gateway:v1.0.0
-+   ```
-+2. **在 DSH 設定中配置網關網址**（或編輯 `cordis.patch.yml`）：
-+   ```yaml
-+   dsh-plugin-vajraclaw:
-+     gatewayUrl: "http://localhost:8080"
-+   ```
-+3. **連接其他外部 Agent (AGY / Codex / Claude Code / Cursor)**：
-+   ```bash
-+   export DROS_GATEWAY_URL="http://localhost:8080"
-+   export DROS_IDENTITY_SEED="0x1a2b3c4d..." # 本機專屬 Ed25519 私鑰種子 Hex
-+   ```
-+
-+👉 **[📖 閱讀進階資安與多 Agent 拓撲加固手冊 (docs/ADVANCED_SECOPS_GUIDE.md)](docs/ADVANCED_SECOPS_GUIDE.md)**（獲取 `internal: true` 網路微隔離 Compose 範本、Falco eBPF 核心防逃逸與 Wazuh SIEM 整合指南）。
-+
-+---
+
+### 模式 A：標準單機模式（預設，零依賴，無需 Docker）
+直接在 DSH 中安裝外掛，即刻啟用高危指令攔截、敏感檔案保護與本地審計鏈：
+```bash
+dsh plugin --profile web add dsh-plugin-vajraclaw
+```
+*(100% 在 DSH 進程內運作，無額外網路開銷，開箱即用)*
+
+---
+
+### 模式 B：進階多 Agent 工作站模式（選配，啟用 Docker 網關）
+若您需要跨平台同時守護多個 Agent（DSH + Google AGY + Codex + Claude Code + Cursor），並啟用 **原生 W3C `did:key` 身分指紋、RFC-010 護照與微秒級 AST 策略查表**：
+
+1. **啟動免費版 DROS Docker 網關**：
+   ```bash
+   docker run -d -p 8080:8080 --name dros-gateway dros/hacker-gateway:v1.0.0
+   ```
+2. **在 DSH 設定中配置網關網址**（或編輯 `cordis.patch.yml`）：
+   ```yaml
+   dsh-plugin-vajraclaw:
+     gatewayUrl: "http://localhost:8080"
+   ```
+3. **連接其他外部 Agent (AGY / Codex / Claude Code / Cursor)**：
+   ```bash
+   export DROS_GATEWAY_URL="http://localhost:8080"
+   export DROS_IDENTITY_SEED="0x1a2b3c4d..." # 本機專屬 Ed25519 私鑰種子 Hex
+   ```
+
+👉 **[📖 閱讀進階資安與多 Agent 拓撲加固手冊 (docs/ADVANCED_SECOPS_GUIDE.md)](docs/ADVANCED_SECOPS_GUIDE.md)**（獲取 `internal: true` 網路微隔離 Compose 範本、Falco eBPF 核心防逃逸與 Wazuh SIEM 整合指南）。
+
+---
 
 
 ## 📜 相關技術核心論文與實測驗證 (Technical Foundations & Benchmarks)

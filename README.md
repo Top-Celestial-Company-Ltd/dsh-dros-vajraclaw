@@ -107,6 +107,19 @@ graph TD
     end
 ```
 
+## 📊 Dual Mode Comparison Matrix (Standalone Plugin vs. Docker Gateway)
+
+| Capability Dimension | 📦 Mode A: Standalone Plugin (Default) | ⚡ Mode B: DROS Docker Gateway (Optional) |
+| :--- | :---: | :---: |
+| **Runtime Environment** | Pure In-Process TypeScript (Zero Dependency) | Local Docker Container (`localhost:8080`) |
+| **Supported Agents** | DeepSeek Harness (DSH) Only | DSH + Google AGY + Codex + Claude + Cursor |
+| **Principal Identity** | Process-Bound Agent ID | **Native W3C `did:key` (Ed25519) Cryptographic Identity** |
+| **Tool Execution Gate** | **Robust Regex Shell & File Pattern Failsafe** | **Deterministic AST Bitmap Policy Engine (<1μs)** |
+| **Audit Verification** | Persistent Hash-Linked JSONL (Local Disk) | **Ed25519 Cryptographically Signed Merkle Chain** |
+| **RFC-010 Agent Passport** | Standard Format Interpretation | **Full Local Passport Issuance & Multi-Agent Attestation** |
+| **Network Overhead** | 0 ms (Direct In-Memory Hook) | <1 ms (Local Loopback HTTP / C-ABI) |
+| **License & Access** | **100% Free Forever (Apache-2.0)** | **Free for Personal Hacker Use (Community)** |
+
 ---
 
 ## 🚀 Quick Start (极速上手)
