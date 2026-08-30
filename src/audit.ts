@@ -15,13 +15,31 @@ export class DrosAuditLogger {
       } catch {}
     }
     this.logPath = path.join(dir, 'execution-audit.jsonl');
+    this.recoverLastHash();
+  }
+
+  private recoverLastHash(): void {
+    try {
+      if (fs.existsSync(this.logPath)) {
+        const content = fs.readFileSync(this.logPath, 'utf8').trim();
+        if (content) {
+          const lines = content.split('\n');
+          const lastLine = lines[lines.length - 1];
+          if (lastLine) {
+            const parsed = JSON.parse(lastLine);
+            if (parsed && typeof parsed.record_hash === 'string') {
+              this.lastHash = parsed.record_hash;
+            }
+          }
+        }
+      }
+    } catch {}
   }
 
   public record(entry: EvaluationResult, agentId: string = 'dsh-agent'): void {
     try {
       const recordData = {
         timestamp: new Date().toISOString(),
-        did: entry.did,
         agent_id: agentId,
         tool: entry.tool,
         decision: entry.decision,
@@ -38,3 +56,4 @@ export class DrosAuditLogger {
     } catch {}
   }
 }
+

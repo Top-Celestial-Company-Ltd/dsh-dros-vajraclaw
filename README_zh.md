@@ -1,65 +1,50 @@
 # ⚡ DROS™ VajraClaw for DSH & Multi-Agent Workstations
-### DSH 原生外掛 + 跨 Agent 確定性執行治理與微秒級安全熔斷微核心 (v2.0)
+### DSH 原生外掛 + 本機工具調用防護與運行期治理側車 (v2.1.0)
 
 [![Official Website](https://img.shields.io/badge/官方網站-dr--os.io-purple.svg?style=for-the-badge)](https://dr-os.io)
 [![DSH Compatible](https://img.shields.io/badge/DSH-Cordis_Native-success)](https://github.com/deepseek-ai/dsh)
 [![npm version](https://img.shields.io/npm/v/dsh-plugin-vajraclaw.svg)](https://www.npmjs.com/package/dsh-plugin-vajraclaw)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![W3C DID](https://img.shields.io/badge/RFC--010-W3C_DID_Native-green.svg)](#)
 [![Patent Status](https://img.shields.io/badge/U.S._Patent-64%2F111%2C973-blue.svg)](#)
 
 [English](https://github.com/Top-Celestial-Company-Ltd/dsh-dros-vajraclaw/blob/main/README.md) | [繁體中文](https://github.com/Top-Celestial-Company-Ltd/dsh-dros-vajraclaw/blob/main/README_zh.md) | [🌐 官方網站 (dr-os.io)](https://dr-os.io)
 
-通用型 **AI Agent 確定性運行期安全治理與微秒級熔斷微核心**。完美相容 **DeepSeek Harness (DSH)** Cordis 微核心插件架構，同時提供「嵌入式本地引擎」與「全域 Docker 網關」雙模式，守護 **AGY (Google Antigravity)、OpenAI Codex、Claude Code、Cursor 與 OpenClaw** 等各類 Agent。
+**DSH 本機工具調用防護外掛**：在工具執行前精準攔截高風險 Shell 指令模式（如遞迴強制刪除、Fork 炸彈、磁區覆寫）與敏感憑證檔案讀取，具備跨 session 持續性之哈希鏈 JSONL 審計記錄，並可選配外部 Gateway 實現全域多 Agent 集中策略治理。
 
 ---
 
 ## 💡 雙模架構設計 (Dual-Mode Architecture)
 
-DROS VajraClaw 採用創新的「內外兼修」雙軌治理架構：
+DROS VajraClaw 提供「零依賴本機防護」與「集中式網關」雙模式：
 
-* **模式 1：DSH 嵌入式本地治理 (Embedded Mode, 免 Docker)**：
-  * 透過 Cordis `apply(ctx, config)` 原生掛載在 DSH 內。
-  * 內建 TypeScript 確定性規則庫、W3C DID 產生器與本地 Merkle 審計日誌。
-  * 預設 **Fail-Open (Fail-Safe)**，絕不破壞宿主 DSH 工具調用，一鍵安裝立即享有本地安全防護！
-* **模式 2：全工作站多 Agent 網關模式 (Gateway Mode)**：
-  * 當本機啟動了 DROS Universal Docker (`localhost:8080`) 時，外掛自動將治理策略與審計鏈向上對齊至 Gateway。
-  * 同時 AGY、Codex、Claude Code 也連向 8080 共享同一防禦邊界！
+* **模式 1：DSH 嵌入式本機防護 (Embedded Mode，預設)**：
+  * 透過 Cordis `apply(ctx, config)` 原生掛載於 DSH。
+  * 內建 TypeScript 正規表達式高危模式攔截與持久化哈希鏈審計日誌。
+  * 預設 **Fail-Open (Fail-Safe)**，不破壞宿主正常調用，一鍵安裝即刻獲得本機安全防護。
+* **模式 2：全工作站多 Agent 網關模式 (Gateway Mode，可選)**：
+  * 使用者可選配啟動外部 DROS Gateway 容器，外掛自動將策略與審計日誌集中同步。
+  * 支援 AGY、Codex、Claude Code、Cursor 多 Agent 共享集中治理邊界。
 
 ```text
-                 取得入口 (GET IT HERE)
-                    DSH 市集外掛
-                         │
-                         │ 渠道分發 (distribution)
-                         ▼
-                   DROS VajraClaw
-                         │
-                 部署形態 (DEPLOY IT HERE)
-                   Docker / Sidecar
-                         │
-       ┌─────────────────┼─────────────────┐
-       ▼                 ▼                 ▼
-      DSH               AGY              Codex ... (Claude, Cursor, OpenClaw)
-       │                 │                 │
-       └─────────────────┼─────────────────┘
-                         ▼
-                DROS 治理邊界 (Enforcement)
-                         │
-           ┌─────────────┼─────────────┐
-           ▼             ▼             ▼
-          MCP           API           CLI
+                 DSH 工具調用事件 (Tool Call)
+                          │
+                          ▼
+            [dsh-plugin-vajraclaw]
+                          │
+           ┌──────────────┴──────────────┐
+           ▼                             ▼
+   [嵌入模式] (預設)               [網關模式] (可選)
+   • 正則高危模式攔截              • 集中式多 Agent 策略
+   • 敏感憑證讀取防護              • 跨端同步 (AGY, Codex, Claude)
+   • 持久化 JSONL 審計鏈           • 需額外啟動 Gateway 容器
 ```
 
 ---
 
-> 🎁 **【個人開發者社群版：多 Agent 工作站永久免費】**
-> 
-> * 🛡️ **個人使用（非商業用途） 100% 永久免費**（為本機多 Agent 工作站建立統一安全邊界，支援最多 **5 個並發 Agent**）。
-> * 🪪 **三層密碼學架構模型 (`RFC-010`)**：
->   * **主體身分 (Identity)**：原生 W3C DID 金鑰綁定 (`did:key:z6Mku...`)。
->   * **執行存證 (Evidence)**：每次 Tool 執行產生 Ed25519 數位簽章。
->   * **不可否認追溯 (Accountability)**：防篡改之本機 JSON 審計存證鏈。
-> * ⚡ **Universal Docker 網關**：同時保護 DSH 外掛、MCP 服務器與各類終端 CLI Agent。
+> 🎁 **【個人開發者社群版：本機工作站永久免費】**
+> * 🛡️ **個人使用（非商業用途） 100% 永久免費**：嵌入式本機引擎完全開源 (Apache-2.0)。
+> * 📝 **持久化審計日誌**：結構化 JSONL 記錄，支援重啟後自動延續哈希鏈。
+> * ⚡ **選配集中式網關**：如需多 Agent 跨工作站協同治理，可隨時啟用外部網關。
 >
 > ⚖️ **【非商業用途 (Non-Commercial Use) 法律邊界明確界定】**
 > 

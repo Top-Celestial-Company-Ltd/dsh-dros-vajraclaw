@@ -1,7 +1,7 @@
 {
   "name": "dsh-plugin-vajraclaw",
-  "version": "2.0.0",
-  "description": "Deterministic Runtime Execution Governance & Security Circuit-Breaker for DSH & Multi-Agent Workstations",
+  "version": "2.1.0",
+  "description": "Local tool-call failsafe for DSH: blocks a fixed list of high-risk shell patterns and credential-file reads before execution, with a per-session hash-linked JSONL audit log, and an optional external Gateway for centralized policy.",
   "type": "module",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -20,18 +20,12 @@
     "awesome-dsh-plugin",
     "awesome-dsh-plugins",
     "security",
-    "governance",
-    "agent-security",
-    "runtime-security",
-    "zero-trust",
+    "failsafe",
+    "tool-guard",
     "vajraclaw",
     "dros",
     "deepseek-harness",
-    "agent-governance",
-    "guardrail",
-    "circuit-breaker",
-    "w3c-did",
-    "rfc-010"
+    "circuit-breaker"
   ],
   "author": "Top-Celestial Company Ltd. / Jimmy Chen <service@dr-os.io>",
   "license": "Apache-2.0",
@@ -41,15 +35,15 @@
     "url": "git+https://github.com/Top-Celestial-Company-Ltd/dsh-dros-vajraclaw.git"
   },
   "dsh": {
-    "displayName": "DROS™ VajraClaw - Agent Governance",
+    "displayName": "DROS™ VajraClaw - Local Tool Failsafe",
     "id": "celestial.dros.vajraclaw",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "bundle": {
       "patch": "./cordis.patch.yml"
     },
     "category": "security",
     "icon": "shield-check",
-    "description": "Embedded & Gateway Dual-Mode Microsecond Execution Governance for DSH & Multi-Agent Environments",
+    "description": "Local tool-call failsafe for DSH with regex shell pattern blocking, credential read protection, hash-linked JSONL audit log, and optional external Gateway support.",
     "profiles": [
       "web",
       "tui",
@@ -59,9 +53,9 @@
     "settings": {
       "enableEmbeddedEngine": {
         "type": "boolean",
-        "title": "Enable Embedded Engine",
+        "title": "Enable Embedded Failsafe Engine",
         "default": true,
-        "description": "Enable zero-latency local deterministic circuit-breaker and W3C DID binding without Docker requirements."
+        "description": "Enable zero-latency local pattern failsafe for high-risk shell commands and credential files."
       },
       "strictFailClosed": {
         "type": "boolean",
@@ -72,8 +66,8 @@
       "gatewayUrl": {
         "type": "string",
         "title": "DROS Gateway Endpoint",
-        "default": "http://localhost:8080",
-        "description": "Optional URL for DROS Universal Docker Gateway to synchronize governance across AGY, Codex, and Claude."
+        "default": "",
+        "description": "Optional URL for external DROS Gateway. Default is empty (disabled)."
       },
       "licenseKey": {
         "type": "string",
@@ -93,9 +87,9 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "node ./node_modules/typescript/bin/tsc -p tsconfig.json",
+    "build": "npx tsc -p tsconfig.json",
     "prepublishOnly": "npm run build",
-    "test": "node ./node_modules/typescript/bin/tsc -p tsconfig.json && node test/run_tests.mjs"
+    "test": "npx tsc -p tsconfig.json && node test/run_tests.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.2.0",

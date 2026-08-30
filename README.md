@@ -1,62 +1,41 @@
 # ⚡ DROS™ VajraClaw for DSH & Multi-Agent Workstations
-### Universal Deterministic Execution Governance, Circuit-Breaker & W3C DID Standard for Autonomous AI Agents
+### Local Tool-Call Failsafe & Runtime Governance Sidecar for Autonomous AI Agents
 
 [![Official Website](https://img.shields.io/badge/Official_Website-dr--os.io-purple.svg?style=for-the-badge)](https://dr-os.io)
 [![DSH Compatible](https://img.shields.io/badge/DSH-Compatible-success)](https://github.com/deepseek-ai/dsh)
 [![npm version](https://img.shields.io/npm/v/dsh-plugin-vajraclaw.svg)](https://www.npmjs.com/package/dsh-plugin-vajraclaw)
-[![W3C DID](https://img.shields.io/badge/RFC--010-W3C_DID_Native-green.svg)](#)
 [![Patent Status](https://img.shields.io/badge/U.S._Patent-64%2F111%2C973-blue.svg)](#)
 
 [English](#english) | [繁體中文說明](#-繁體中文說明) | [🌐 Official Website](https://dr-os.io)
 
-Universal **Deterministic Runtime Execution Governance & Security Circuit-Breaker** Gateway. Natively integrates as a **DeepSeek Harness (DSH) plugin** while functioning as a centralized Docker-based security sidecar for **AGY (Google Antigravity), OpenAI Codex, Claude Code, Cursor, and OpenClaw**.
+**Local tool-call failsafe for DSH**: blocks high-risk shell patterns (e.g. destructive recursive deletions, fork bombs, disk overwriting) and credential-file reads before execution, with a persistent hash-linked JSONL audit log, and an optional external Gateway for centralized multi-agent policy.
 
-> 🎯 **Key Architectural Insight:**  
-> **DSH is the distribution channel; DROS is the cross-agent enforcement layer.**
+> 🎯 **Dual Architecture Overview:**  
+> 1. **Embedded Mode (Default)**: Zero-dependency local TypeScript pattern-matching failsafe and JSONL audit chain running natively inside DSH with zero latency overhead.
+> 2. **Gateway Mode (Optional)**: Connect to an external DROS Gateway container for multi-agent workstation synchronization (AGY, Codex, Claude Code, Cursor).
 
 ```text
-                 GET IT HERE
-              DSH Marketplace
-                     │
-                     │ distribution
-                     ▼
-               DROS VajraClaw
-                     │
-              DEPLOY IT HERE
-             Docker / Sidecar
-                     │
-       ┌─────────────┼─────────────┐
-       ▼             ▼             ▼
-      DSH           AGY          Codex ... (Claude, Cursor, OpenClaw)
-       │             │             │
-       └─────────────┼─────────────┘
-                     ▼
-             DROS Enforcement
-                     │
-         ┌───────────┼───────────┐
-         ▼           ▼           ▼
-        MCP         API         CLI
+                 DSH Tool Call Event
+                          │
+                          ▼
+            [dsh-plugin-vajraclaw]
+                          │
+           ┌──────────────┴──────────────┐
+           ▼                             ▼
+   [Embedded Mode] (Default)      [Gateway Mode] (Optional)
+   • Regex Pattern Failsafe       • Centralized Multi-Agent Policy
+   • Sensitive File Protection    • Cross-Station Sync (AGY, Codex, Claude)
+   • Persistent JSONL Audit       • Requires DROS Gateway Container
 ```
 
 ---
 
 > 🎁 **【Community Edition: Free Forever for Personal Multi-Agent Workstations】**
 > 
-> * 🛡️ **100% Free for Personal Use (Non-Commercial Use)** (Enforces a unified execution governance boundary for up to **5 Concurrent Agents** across your local workstation).
-> * 🪪 **Three-Tier Cryptographic Model (`RFC-010`)**:
->   * **Identity**: W3C DID Native Key Binding (`did:key:z6Mku...`).
->   * **Evidence**: Ed25519 Cryptographic Signatures per tool execution step.
->   * **Accountability**: Tamper-evident Local JSON Audit Chains.
-> * ⚡ **Universal Docker Gateway**: Protects DSH plugins, MCP servers, and external CLI agents simultaneously.
->
-> ⚖️ **【Explicit Non-Commercial vs Commercial License Boundaries】**
-> 
-> | Dimension | 🟢 Permitted (Community Edition: $0 Forever) | 🔴 Prohibited (Requires Startup / Enterprise License) |
-> | :--- | :--- | :--- |
-> | **Entity Type** | Natural persons, individual OSS contributors, students, hobbyists | Legal entities, corporations, consulting firms, agencies |
-> | **Use Case** | **Personal skill learning**, local sandbox testing, OSS audits, toy projects | **Internal enterprise workflows**, production services, team automation |
-> | **Commercial Value** | Zero direct or indirect revenue generation | **Paid SaaS/API backends**, client billable deliverables, commercial ops |
-> | **Agent Scale** | Up to 5 concurrent local agents | >5 concurrent agents, multi-server clusters, K8s orchestration |
+> * 🛡️ **100% Free for Personal Use (Non-Commercial Use)**: Embedded local failsafe is fully open-source (Apache-2.0).
+> * 📝 **Audit Logging**: Structured JSONL audit records linking execution history across session restarts.
+> * ⚡ **Optional Centralized Gateway**: Provides cross-agent governance when opting into external Gateway deployment.
+
 > 
 > > 📌 **Compliance Notice**: Any deployment operated by corporate entities, salaried employees within the scope of employment, or used to generate commercial value strictly requires a commercial license.
 

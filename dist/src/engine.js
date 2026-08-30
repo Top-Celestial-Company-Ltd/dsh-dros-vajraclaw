@@ -1,68 +1,58 @@
-import * as crypto from 'crypto';
 export class DrosEmbeddedEngine {
-    did;
-    constructor(seedHex) {
-        const hash = crypto.createHash('sha256').update(seedHex || 'dros-default-seed').digest('hex');
-        this.did = 'did:key:z6Mku' + hash.slice(0, 32);
-    }
-    getDID() {
-        return this.did;
-    }
+    constructor() { }
     evaluate(req) {
         const start = process.hrtime.bigint();
         const tool = (req.tool || '').trim().toLowerCase();
         const argsStr = JSON.stringify(req.args || {}).toLowerCase();
-        // 1. Critical Binary Failsafe Rules (High-Risk Syscall & Privilege Escalation)
+        // 1. High-Risk Shell Command & Destructive Pattern Regex Failsafe
         const dangerousPatterns = [
-            '/etc/shadow',
-            '/etc/sudoers',
-            'rm -rf /',
-            'mkfs',
-            ':(){ :|:&n};::',
-            'chmod 777 /',
-            '> /dev/sda'
+            { regex: /\brm\s+-[a-z]*r[a-z]*f[a-z]*\s+(\/|\/\*|\.\/|~)/i, desc: 'Recursive forced deletion of root or workspace' },
+            { regex: /\brm\s+-[a-z]*f[a-z]*r[a-z]*\s+(\/|\/\*|\.\/|~)/i, desc: 'Recursive forced deletion of root or workspace' },
+            { regex: /\b(mkfs(\.[a-z0-9]+)?|dd\s+if=.*of=\/dev\/[a-z0-9]+)/i, desc: 'Disk formatting or direct block overwrite' },
+            { regex: /(:(\(\)\{\s*:\|:&\s*\};:))/i, desc: 'Fork bomb execution' },
+            { regex: /\bchmod\s+(-[a-z]+\s+)?777\s+\//i, desc: 'Global permission deregulation' },
+            { regex: /\b(cat|head|tail|less|more|nano|vi|vim)\s+[^|;]*\/etc\/(shadow|sudoers)/i, desc: 'Direct inspection of sensitive system credential paths' }
         ];
-        for (const pattern of dangerousPatterns) {
-            if (argsStr.includes(pattern)) {
+        for (const item of dangerousPatterns) {
+            if (item.regex.test(argsStr)) {
                 const end = process.hrtime.bigint();
                 const latency = Number(end - start) / 1000;
                 return {
                     decision: 'BLOCK',
-                    reason: `[DROS Circuit-Breaker] Critical security risk detected matching signature: "${pattern}"`,
+                    reason: `[DROS Pattern Failsafe] High-risk shell pattern detected: ${item.desc}`,
                     tool: req.tool,
-                    latency_us: Math.max(1, Math.round(latency)),
-                    did: this.did
+                    latency_us: Math.max(1, Math.round(latency))
                 };
             }
         }
-        // 2. Sensitive Credential Exfiltration Interception
+        // 2. Sensitive Credential File Inspection Interception
         const credentialExfiltration = [
             'id_rsa',
+            'id_ed25519',
             '.aws/credentials',
-            '.env_secrets'
+            '.env_secrets',
+            '.bash_history'
         ];
         for (const cred of credentialExfiltration) {
-            if (argsStr.includes(cred) && (tool.includes('exec') || tool.includes('bash') || tool.includes('eval') || tool.includes('read'))) {
+            if (argsStr.includes(cred) && (tool.includes('exec') || tool.includes('bash') || tool.includes('eval') || tool.includes('read') || tool.includes('fs'))) {
                 const end = process.hrtime.bigint();
                 const latency = Number(end - start) / 1000;
                 return {
                     decision: 'BLOCK',
-                    reason: `[DROS Symplex Masking] Unauthorized attempt to inspect credential vector: "${cred}"`,
+                    reason: `[DROS Pattern Failsafe] Attempt to read sensitive credential path: "${cred}"`,
                     tool: req.tool,
-                    latency_us: Math.max(1, Math.round(latency)),
-                    did: this.did
+                    latency_us: Math.max(1, Math.round(latency))
                 };
             }
         }
-        // 3. Allowed: Deterministic Policy Evaluation Passed
+        // 3. Allowed
         const end = process.hrtime.bigint();
         const latency = Number(end - start) / 1000;
         return {
             decision: 'ALLOW',
-            reason: 'Deterministic Policy Evaluation Passed (O(1) Matrix Verified)',
+            reason: 'Local pattern check passed',
             tool: req.tool,
-            latency_us: Math.max(1, Math.round(latency)),
-            did: this.did
+            latency_us: Math.max(1, Math.round(latency))
         };
     }
 }

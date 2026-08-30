@@ -13,12 +13,30 @@ export class DrosAuditLogger {
             catch { }
         }
         this.logPath = path.join(dir, 'execution-audit.jsonl');
+        this.recoverLastHash();
+    }
+    recoverLastHash() {
+        try {
+            if (fs.existsSync(this.logPath)) {
+                const content = fs.readFileSync(this.logPath, 'utf8').trim();
+                if (content) {
+                    const lines = content.split('\n');
+                    const lastLine = lines[lines.length - 1];
+                    if (lastLine) {
+                        const parsed = JSON.parse(lastLine);
+                        if (parsed && typeof parsed.record_hash === 'string') {
+                            this.lastHash = parsed.record_hash;
+                        }
+                    }
+                }
+            }
+        }
+        catch { }
     }
     record(entry, agentId = 'dsh-agent') {
         try {
             const recordData = {
                 timestamp: new Date().toISOString(),
-                did: entry.did,
                 agent_id: agentId,
                 tool: entry.tool,
                 decision: entry.decision,
