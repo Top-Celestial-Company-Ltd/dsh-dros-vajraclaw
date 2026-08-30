@@ -127,26 +127,37 @@ graph TD
 
 ---
 
-## 🚀 Quick Start (30 Seconds)
+## 🚀 Quick Start (极速上手)
 
-### Step 1: Start the Universal DROS Docker Gateway
+### Mode A: Standalone Plugin Mode (Default, Zero-Dependency, No Docker)
+Directly install the plugin in DSH to immediately enable high-risk command blocking, credential file protection, and local audit logging:
 ```bash
-docker run -d -p 8080:8080 --name dros-gateway dros/hacker-gateway:v1.0.0
+dsh plugin --profile web add dsh-plugin-vajraclaw
 ```
+*(Runs 100% in-process with zero network overhead and zero external dependencies)*
 
-### Step 2: Connect Your Agents
-* **For DSH**: Install the plugin:
-  ```bash
-  dsh plugin --profile web add dsh-plugin-vajraclaw
-  ```
-* **For AGY / Codex / Claude Code / Cursor / Python SDK**:
-  Connect and protect your local agents instantly with just two environment variables:
-  ```bash
-  export DROS_GATEWAY_URL="http://localhost:8080"
-  export DROS_IDENTITY_SEED="0x1a2b3c4d..." # Your local Ed25519 seed hex
-  ```
+---
+
+### Mode B: Advanced Multi-Agent Workstation Mode (Optional Docker Gateway)
+If you wish to govern multiple multi-agent runtimes (DSH + Google AGY + Codex + Claude Code + Cursor) under a single workstation with **Native W3C `did:key` identity, RFC-010 passports, and microsecond AST policy matrix**:
+
+1. **Launch the Free DROS Docker Gateway**:
+   ```bash
+   docker run -d -p 8080:8080 --name dros-gateway dros/hacker-gateway:v1.0.0
+   ```
+2. **Configure DSH Plugin Gateway Endpoint** (in DSH Settings or `cordis.patch.yml`):
+   ```yaml
+   dsh-plugin-vajraclaw:
+     gatewayUrl: "http://localhost:8080"
+   ```
+3. **Connect Other External Agents (AGY / Codex / Claude Code / Cursor)**:
+   ```bash
+   export DROS_GATEWAY_URL="http://localhost:8080"
+   export DROS_IDENTITY_SEED="0x1a2b3c4d..." # Your local Ed25519 seed hex
+   ```
 
 👉 **[📖 Read the Advanced SecOps Guide (docs/ADVANCED_SECOPS_GUIDE.md)](docs/ADVANCED_SECOPS_GUIDE.md)** for `internal: true` network isolation, Falco eBPF, and Wazuh integration templates.
+
 
 ---
 
