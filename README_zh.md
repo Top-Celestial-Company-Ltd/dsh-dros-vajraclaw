@@ -118,24 +118,6 @@ DROS 雖以 DSH 外掛形式提供一鍵安裝，但底層是 **標準化 Docker
 
 ---
 
-> 💡 **最新定價與方案請以 [官方網站 (dr-os.io)](https://dr-os.io) 公布為準。**
-
-| 安全功能 / 6-Pillar 機制維度 | 📦 純外掛嵌入版 (Embedded) | 🟢 Hacker 個人網關 (免費) | 🔵 Startup | 🟣 Enterprise | 👑 Sovereign |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **架構與載體** | **純 TypeScript (免 Docker)** | **Docker 網關容器** | **VM / NAS Docker** | **K8s / 集群** | **實體隔離 / 硬體專用** |
-| **目標客群** | 單一 DSH 本地環境 | 個人多 Agent 工作站 (PC) | 10~50人新創團隊 | 中大型企業 / 上市公司 | 金融金控 / 國防 |
-| **機器授權 (UUIDs)** | 1 台主機 | 1 組 UUID | 3 組 UUIDs | 15 組 UUIDs | 無限制 |
-| **Concurrent Agents 上限** | 1 個本地 Agent | 5 個並發 Agent | 30 個 | 450 個 | 無限制 (Swarm) |
-| **Pillar 1：Principal 身份證明** | 進程綁定 Agent ID | 原生 W3C `did:key` 指紋 | 3-Tier PKI DIT | 跨域 BEC 憑證發放 | 硬體 Dongle 印記 |
-| **Pillar 2：Authorization 權限區隔**| 強韌正規表達式安全閥 | AST 點陣圖比對 | 零堆積 Bitmaps | 全自訂 Capability 向量 | 動態位元圖多維矩陣 |
-| **Pillar 3：Tool Bound 工具邊界** | 進程事件 Abort / Throw 熔斷 | C-ABI / HTTP 熔斷 (<1μs) | 26.1μs 帶內熔斷 | Sub-500ns Thread Panic | 晶片硬體級物理熔斷 |
-| **Pillar 4：Policy Gate 三大門閥** | 高危模式與機密檔案攔截 | 靜態規則引擎 | 動態 PII 遮蔽 | HITL 雙簽 + ZKP-Lite | 軍規級門閥矩陣 |
-| **Pillar 5：Audit Log 稽核追溯** | 持久化哈希鏈 JSONL (本地硬碟) | Ed25519 簽章日誌 | Ed25519 數位簽章 | SHA-256 Merkle 雜湊鏈 | 不可否認性法院級憑證 |
-| **Pillar 6：Expiry/Revocation 秒撤**| 重新載入配置 / 重啟 | 重啟 Gateway 容器 | 15分鐘 BEC 過期 | <1μs RCU 原子指針切換 | 分散式秒級網格撤銷 |
-| **RFC-010 開放 Agent 護照格式** | 標準護照格式解析 | 本地完整簽章發行 | 多角色 DIT 簽署 | 企業 GuardVM 集中驗證 | 國防級 3-Tier 簽章鏈 |
-
----
-
 ## 🚀 極速上手 (Quick Start)
  
 +### 模式 A：標準單機模式（預設，零依賴，無需 Docker）
