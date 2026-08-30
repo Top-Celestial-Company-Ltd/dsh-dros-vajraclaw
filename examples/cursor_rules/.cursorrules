@@ -1,0 +1,2 @@
+# DROS In-Band Execution Guardrail Rules for Cursor
+# Ensure all terminal and file modification tools undergo pre-execution evaluation via DROS Gateway (http://localhost:8080)
