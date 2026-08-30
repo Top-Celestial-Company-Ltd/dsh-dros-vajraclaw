@@ -111,20 +111,19 @@ graph TD
 
 > 💡 **For the latest pricing and tiers, please visit the [Official Website (dr-os.io)](https://dr-os.io).**
 
-| Feature / 6-Pillar Dimension | 🟢 Hacker / Community (Free) | 🔵 Startup | 🟣 Enterprise | 👑 Sovereign |
-| :--- | :---: | :---: | :---: | :---: |
-| **Target Audience** | **Individual Devs / Local Multi-Agent** | 10~50 Dev Teams | Enterprises / Listed Co. | Banking / Defense / Gov |
-| **Machine UUID Limit** | **1 UUID** | 3 UUIDs | 15 UUIDs | **Unlimited** |
-| **Concurrent Agents** | **5 Concurrent Agents** | 30 Agents | 450 Agents | **Unlimited (Swarm)** |
-| **Pillar 1: Principal (W3C DID)** | ✅ **Native W3C `did:key`** | ✅ **3-Tier PKI DIT** | ✅ **Cross-Domain BEC Issuance** | ✅ Hardware Dongle |
-| **Pillar 2: Authorization (Deterministic)**| ✅ **AST Bitmap Matching** | ✅ **Zero-Heap Bitmaps** | ✅ **Custom Capability Vector**| ✅ Multi-Dim Bitmap Matrix |
-| **Pillar 3: Tool Bound (Syscall Gate)** | ✅ **C-ABI / HTTP Fuse (<1μs)**| ✅ **26.1μs In-Band Fuse** | ✅ **Sub-500ns Thread Panic**| ✅ Hardware Physical Fusing |
-| **Pillar 4: Policy Gate (Dynamic Control)**| ❌ Static Rules Only | ✅ **Dynamic PII Masking** | ✅ **HITL Multi-Sig + ZKP** | ✅ Military Gate Matrix |
-| **Pillar 5: Audit Log (Non-Repudiation)** | ✅ **Ed25519 Signed JSON** | ✅ **Ed25519 Signatures**| ✅ **SHA-256 Merkle Tree** | ✅ Court-Admissible Proof |
-| **Pillar 6: Expiry/Revocation (<1μs)** | ❌ Gateway Restart | 🟡 15-min BEC Expiry | ✅ **<1μs RCU Pointer Swap** | ✅ Distributed Mesh Revoke |
-| **RFC-010 Open Passport Standard** | ✅ **Full Local Issuance** | ✅ **Multi-Role DIT Sign** | ✅ **GuardVM Validation** | ✅ 3-Tier Sign Chain |
-| **Add-On Compliance Packages** | ❌ Not Eligible | 💡 **Eligible for Add-Ons** | ⭐ **Eligible for Add-Ons** | ✅ Fully Included |
-| **Deployment Target** | **Local PC / Multi-Agent Docker** | **VM / NAS Docker** | K8s / GKE / Cluster | Air-Gapped / FPGA |
+| Feature / 6-Pillar Dimension | 📦 Standalone Plugin (Embedded) | 🟢 Hacker Gateway (Free) | 🔵 Startup | 🟣 Enterprise | 👑 Sovereign |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Architecture / Carrier** | **Pure TypeScript (No Docker)** | **Docker Gateway Container** | **VM / NAS Docker** | **K8s / Multi-Node** | **Air-Gapped / Hardware** |
+| **Target Audience** | Single DSH Workspace | Individual Multi-Agent PC | 10~50 Dev Teams | Enterprises / Listed Co. | Banking / Defense / Gov |
+| **Machine Limit** | 1 Host | 1 Host UUID | 3 UUIDs | 15 UUIDs | Unlimited |
+| **Concurrent Agents** | 1 Local Agent | 5 Concurrent Agents | 30 Agents | 450 Agents | Unlimited (Swarm) |
+| **Pillar 1: Principal Identity** | Process-Bound Agent ID | Native W3C `did:key` | 3-Tier PKI DIT | Cross-Domain BEC Issuance | Hardware Dongle |
+| **Pillar 2: Authorization** | Robust Regex Pattern Failsafe | AST Bitmap Matching | Zero-Heap Bitmaps | Custom Capability Vector | Multi-Dim Bitmap Matrix |
+| **Pillar 3: Tool Bound (Fuse)** | In-Process Event Abort / Throw | C-ABI / HTTP Fuse (<1μs) | 26.1μs In-Band Fuse | Sub-500ns Thread Panic | Hardware Physical Fuse |
+| **Pillar 4: Policy Gate** | High-Risk Pattern & Credential Block | Static Rules Engine | Dynamic PII Masking | HITL Multi-Sig + ZKP | Military Gate Matrix |
+| **Pillar 5: Audit Log** | Hash-Linked JSONL (Local Disk) | Ed25519 Signed JSON | Ed25519 Signatures | SHA-256 Merkle Tree | Court-Admissible Proof |
+| **Pillar 6: Revocation** | Config Reload / Restart | Gateway Restart | 15-min BEC Expiry | <1μs RCU Pointer Swap | Distributed Mesh Revoke |
+| **RFC-010 Passport** | Standard Format Parsing | Full Local Issuance | Multi-Role DIT Sign | GuardVM Validation | 3-Tier Sign Chain |
 
 ---
 
