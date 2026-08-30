@@ -1,5 +1,5 @@
-import { DrosEmbeddedEngine } from '../dist/src/index.js';
-import { DrosAuditLogger } from '../dist/src/audit.js';
+import { DrosEmbeddedEngine } from '../dist/index.js';
+import { DrosAuditLogger } from '../dist/audit.js';
 import * as fs from 'fs';
 import * as path from 'path';
 

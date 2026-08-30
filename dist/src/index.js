@@ -1,15 +1,17 @@
-import { z } from 'zod';
 import { DrosEmbeddedEngine } from './engine.js';
 import { DrosAuditLogger } from './audit.js';
 export { DrosEmbeddedEngine, DrosAuditLogger };
 export const name = 'dsh-plugin-vajraclaw';
-export const ConfigSchema = z.object({
-    gatewayUrl: z.string().default(''),
-    enableEmbeddedEngine: z.boolean().default(true),
-    strictFailClosed: z.boolean().default(false),
-    licenseKey: z.string().optional().default(''),
-    auditLogDir: z.string().default('.dros-audit')
-});
+export const ConfigSchema = {
+    type: 'object',
+    properties: {
+        gatewayUrl: { type: 'string', default: '' },
+        enableEmbeddedEngine: { type: 'boolean', default: true },
+        strictFailClosed: { type: 'boolean', default: false },
+        licenseKey: { type: 'string', default: '' },
+        auditLogDir: { type: 'string', default: '.dros-audit' }
+    }
+};
 export function apply(ctx, config) {
     const engine = new DrosEmbeddedEngine();
     const logger = new DrosAuditLogger(config.auditLogDir);

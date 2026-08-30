@@ -9,11 +9,8 @@ export interface EvaluationResult {
     reason: string;
     tool: string;
     latency_us: number;
-    did: string;
 }
 export declare class DrosEmbeddedEngine {
-    private did;
-    constructor(seedHex?: string);
-    getDID(): string;
+    constructor();
     evaluate(req: EvaluationRequest): EvaluationResult;
 }
