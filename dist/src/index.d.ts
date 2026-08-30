@@ -9,6 +9,18 @@ export declare const ConfigSchema: z.ZodObject<{
     strictFailClosed: z.ZodDefault<z.ZodBoolean>;
     licenseKey: z.ZodDefault<z.ZodOptional<z.ZodString>>;
     auditLogDir: z.ZodDefault<z.ZodString>;
-}, z.core.$strip>;
+}, "strip", z.ZodTypeAny, {
+    gatewayUrl: string;
+    enableEmbeddedEngine: boolean;
+    strictFailClosed: boolean;
+    licenseKey: string;
+    auditLogDir: string;
+}, {
+    gatewayUrl?: string | undefined;
+    enableEmbeddedEngine?: boolean | undefined;
+    strictFailClosed?: boolean | undefined;
+    licenseKey?: string | undefined;
+    auditLogDir?: string | undefined;
+}>;
 export type Config = z.infer<typeof ConfigSchema>;
 export declare function apply(ctx: any, config: Config): void;

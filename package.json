@@ -97,8 +97,5 @@
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.0 || ^4.0.1"
-  },
-  "dependencies": {
-    "zod": "^3.25.76"
   }
 }
