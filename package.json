@@ -35,7 +35,7 @@
     "url": "git+https://github.com/Top-Celestial-Company-Ltd/dsh-dros-vajraclaw.git"
   },
   "dsh": {
-    "displayName": "DROS™ VajraClaw - Local Tool Failsafe",
+    "displayName": "DROS\u2122 VajraClaw - Local Tool Failsafe",
     "id": "celestial.dros.vajraclaw",
     "version": "2.1.0",
     "bundle": {
