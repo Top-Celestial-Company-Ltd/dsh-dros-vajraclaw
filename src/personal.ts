@@ -6,6 +6,8 @@
  */
 
 import * as crypto from 'crypto';
+import * as fs from 'fs';
+import * as path from 'path';
 
 export interface ParamConstraint {
   disallowedPatterns?: string[];
@@ -157,8 +159,6 @@ export class DrosPersonalProxyGate {
   }
 }
 export function runPersonalCli() {
-  const fs = require('fs');
-  const path = require('path');
   const args = process.argv.slice(2);
   const command = args[0] || 'status';
 
