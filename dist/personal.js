@@ -5,6 +5,8 @@
  * directly aligned with DWGR-8 Normative Invariants for individual developers.
  */
 import * as crypto from 'crypto';
+import * as fs from 'fs';
+import * as path from 'path';
 export function loadPersonalConfig(jsonString) {
     const parsed = JSON.parse(jsonString);
     if (!parsed.version || !parsed.principalId || !Array.isArray(parsed.rules)) {
@@ -96,8 +98,6 @@ export class DrosPersonalProxyGate {
     }
 }
 export function runPersonalCli() {
-    const fs = require('fs');
-    const path = require('path');
     const args = process.argv.slice(2);
     const command = args[0] || 'status';
     if (command === 'init') {
