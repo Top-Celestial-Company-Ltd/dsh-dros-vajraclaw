@@ -1,10 +1,13 @@
 {
   "name": "dsh-plugin-vajraclaw",
-  "version": "2.1.0",
-  "description": "Local tool-call failsafe for DSH: blocks a fixed list of high-risk shell patterns and credential-file reads before execution, with a per-session hash-linked JSONL audit log, and an optional external Gateway for centralized policy.",
+  "version": "2.2.0",
+  "description": "Local tool-call failsafe and DWGR-8 personal governance proxy gate for DSH: blocks high-risk shell patterns, credential leaks, and enforces declarative param-level boundaries with hash-linked JSONL audit logs and optional Gateway.",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "dros-personal": "dist/personal.js"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -25,7 +28,9 @@
     "vajraclaw",
     "dros",
     "deepseek-harness",
-    "circuit-breaker"
+    "circuit-breaker",
+    "dwgr-8",
+    "mcp-governance"
   ],
   "author": "Top-Celestial Company Ltd. / Jimmy Chen <service@dr-os.io>",
   "license": "Apache-2.0",
@@ -35,15 +40,15 @@
     "url": "git+https://github.com/Top-Celestial-Company-Ltd/dsh-dros-vajraclaw.git"
   },
   "dsh": {
-    "displayName": "DROS\u2122 VajraClaw - Local Tool Failsafe",
+    "displayName": "DROS™ VajraClaw - Local Tool Failsafe & Personal Gate",
     "id": "celestial.dros.vajraclaw",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "bundle": {
       "patch": "./cordis.patch.yml"
     },
     "category": "security",
     "icon": "shield-check",
-    "description": "Local tool-call failsafe for DSH with regex shell pattern blocking, credential read protection, hash-linked JSONL audit log, and optional external Gateway support.",
+    "description": "Local tool-call failsafe and DWGR-8 personal governance gate for DSH with regex pattern blocking, param-level path traversal defense, hash-linked JSONL audit log, and optional external Gateway support.",
     "profiles": [
       "web",
       "tui",
@@ -56,6 +61,12 @@
         "title": "Enable Embedded Failsafe Engine",
         "default": true,
         "description": "Enable zero-latency local pattern failsafe for high-risk shell commands and credential files."
+      },
+      "personalConfigFile": {
+        "type": "string",
+        "title": "DROS Personal Config File Path",
+        "default": "dros.personal.config.json",
+        "description": "Path to local declarative DWGR-8 governance configuration file for action-level and param-level constraints."
       },
       "strictFailClosed": {
         "type": "boolean",

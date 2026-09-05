@@ -114,7 +114,7 @@ graph TD
 | **Runtime Environment** | Pure In-Process TypeScript (Zero Dependency) | Local Docker Container (`localhost:8080`) |
 | **Supported Agents** | DeepSeek Harness (DSH) Only | DSH + Google AGY + Codex + Claude + Cursor |
 | **Principal Identity** | Process-Bound Agent ID | **Native W3C `did:key` (Ed25519) Cryptographic Identity** |
-| **Tool Execution Gate** | **Robust Regex Shell & File Pattern Failsafe** | **Deterministic AST Bitmap Policy Engine (<1μs)** |
+| **Tool Execution Gate** | **DWGR-8 Declarative Param Gate + Regex Failsafe + Local SHA-256 Audit Chain** | **Deterministic AST Bitmap Policy Engine (<1μs)** |
 | **Audit Verification** | Persistent Hash-Linked JSONL (Local Disk) | **Ed25519 Cryptographically Signed Merkle Chain** |
 | **RFC-010 Agent Passport** | Standard Format Interpretation | **Full Local Passport Issuance & Multi-Agent Attestation** |
 | **Network Overhead** | 0 ms (Direct In-Memory Hook) | <1 ms (Local Loopback HTTP / C-ABI) |
@@ -138,6 +138,55 @@ graph TD
 | **License** | Pay-per-Token API | **100% Free (Apache-2.0)** | **Free License for Individuals** | Startup $2,990 / Enterprise $29,990 |
 
 ---
+
+## 🛡️ What's New in v2.2.0: DWGR-8 Personal Declarative Param-Level Gate
+
+Starting from **v2.2.0**, `dsh-plugin-vajraclaw` natively integrates the **DROS Personal (Community Edition)** micro-gate!
+Developers can enforce fine-grained **Action-Level Whitelists/Blacklists**, **Path Traversal Defenses**, and **Parameter Pattern Constraints** locally with **zero external dependencies and zero Docker requirements**.
+
+### 1. Initialize Local Governance Config
+Run in your DSH workspace:
+```bash
+npx dsh-plugin-vajraclaw init
+# Generates a standard dros.personal.config.json template
+```
+
+### 2. Declarative Config Specification (`dros.personal.config.json`)
+```json
+{
+  "version": "1.0.0",
+  "principalId": "did:key:personal-developer",
+  "mode": "strict",
+  "rules": [
+    {
+      "toolId": "filesystem",
+      "allowedActions": ["read_file", "list_directory"],
+      "blockedActions": ["delete_file", "format_disk"],
+      "paramConstraints": {
+        "path": {
+          "disallowedPatterns": ["..", "/etc/", "C:\\Windows\\", ".env", ".ssh"]
+        }
+      }
+    },
+    {
+      "toolId": "sqlite",
+      "allowedActions": ["read_query", "select"],
+      "blockedActions": ["drop_table", "delete"],
+      "paramConstraints": {
+        "query": {
+          "disallowedPatterns": ["DROP ", "DELETE ", "TRUNCATE ", "ALTER "]
+        }
+      }
+    }
+  ]
+}
+```
+
+### 3. Key Defensive Invariants
+* **Sub-10 Microsecond Zero-Latency**: Native TypeScript execution within DSH event loop without network hops.
+* **Path Traversal & Injection Blocking**: Proactively detects and rejects `..`, sensitive directories, and dangerous SQL / shell keywords in parameters.
+* **Tamper-Evident SHA-256 Audit Chain**: Computes sequential cryptographic hash blocks for all tool executions.
+* **Fail-Safe Graceful Fallback**: If no config file is detected, automatically falls back to embedded regex circuit breaking without breaking host operation.
 
 ## 🚀 Quick Start (极速上手)
 

@@ -1,5 +1,5 @@
 # ⚡ DROS™ VajraClaw for DSH & Multi-Agent Workstations
-### DSH 原生外掛 + 本機工具調用防護與運行期治理側車 (v2.1.0)
+### DSH 原生外掛 + 本機工具調用防護與運行期治理側車 (v2.2.0 - 個人版 DWGR-8 宣告式參數級微核心)
 
 [![Official Website](https://img.shields.io/badge/官方網站-dr--os.io-purple.svg?style=for-the-badge)](https://dr-os.io)
 [![DSH Compatible](https://img.shields.io/badge/DSH-Cordis_Native-success)](https://github.com/deepseek-ai/dsh)
@@ -119,13 +119,66 @@ DROS 雖以 DSH 外掛形式提供一鍵安裝，但底層是 **標準化 Docker
 | **運行載體** | 純 TypeScript（DSH 進程內，零外部依賴） | 本機 Docker 容器 (`localhost:8080`) |
 | **支援治理之 Agent** | 專屬保護 DeepSeek Harness (DSH) | 同時聯防 DSH + Google AGY + Codex + Claude + Cursor |
 | **主體身分認證 (Identity)** | 進程綁定 Agent ID | **原生 W3C `did:key` (Ed25519) 密碼學身分** |
-| **工具執行閘門 (Gate)** | **強韌正規表達式 Shell 與機密檔案安全閥** | **確定性 AST 點陣圖策略引擎 (<1μs)** |
+| **工具執行閘門 (Gate)** | **DWGR-8 宣告式參數級防線 + 正則安全閥 + 本地 SHA-256 存證鏈** | **確定性 AST 點陣圖策略引擎 (<1μs)** |
 | **不可否認性審計鏈** | 持久化 SHA-256 雜湊鏈 JSONL (本地磁碟) | **Ed25519 數位簽章 Merkle 雜湊鏈** |
 | **RFC-010 開放護照格式** | 標準護照格式解析 | **本地完整簽署發放與跨 Agent 交互認證** |
 | **執行期開銷** | 0 ms（記憶體事件直接攔截） | <1 ms（本機 Loopback HTTP / C-ABI） |
 | **授權方式** | **永久完全免費 (Apache-2.0 開源)** | **個人 Hacker / 社群永久免費授權** |
 
 ---
+
+
+---
+
+## 🛡️ v2.2.0 重大更新：DWGR-8 個人版宣告式參數級治理 (Personal Proxy Gate)
+
+在 **v2.2.0** 中，DSH 插件原生整合了 **DROS Personal (Community Edition)** 本地微核心！
+您無需架設外部 Docker 網關，即可直接在專案目錄下透過宣告式 JSON 設定檔，實現 **動作白名單 (Allowed Actions)**、**危險路徑遍歷防禦 (Path Traversal Guard)** 與 **深層參數約束 (Param Constraints)**。
+
+### 1. 快速初始化個人治理設定檔
+在 DSH 工作專案目錄下執行：
+```bash
+# 透過 dsh-plugin-vajraclaw 提供的 CLI 快速生成設定
+npx dsh-plugin-vajraclaw init
+# 或手動建立 dros.personal.config.json
+```
+
+### 2. 宣告式設定檔範例 (`dros.personal.config.json`)
+```json
+{
+  "version": "1.0.0",
+  "principalId": "did:key:personal-developer",
+  "mode": "strict",
+  "rules": [
+    {
+      "toolId": "filesystem",
+      "allowedActions": ["read_file", "list_directory"],
+      "blockedActions": ["delete_file", "format_disk"],
+      "paramConstraints": {
+        "path": {
+          "disallowedPatterns": ["..", "/etc/", "C:\\Windows\\", ".env", ".ssh"]
+        }
+      }
+    },
+    {
+      "toolId": "sqlite",
+      "allowedActions": ["read_query", "select"],
+      "blockedActions": ["drop_table", "delete"],
+      "paramConstraints": {
+        "query": {
+          "disallowedPatterns": ["DROP ", "DELETE ", "TRUNCATE ", "ALTER "]
+        }
+      }
+    }
+  ]
+}
+```
+
+### 3. 核心防禦特性
+* **零依賴極速執行**：純本機 TypeScript 原生密碼學計算，判定耗時 $\le 10\mu s$，零網路開銷。
+* **路徑穿越防護**：精準攔截 `..`、系統機密目錄等路徑注入，防範 Agent 越界竊取機密。
+* **防篡改審計鏈**：自動延續本機 SHA-256 雜湊鏈存證，確保每一次 Tool 執行的合規軌跡不可否認。
+* **Fail-Safe 優雅降級**：若目錄未提供 `dros.personal.config.json`，外掛自動切換為內建高危正則安全閥，絕不干擾宿主。
 
 ## 🚀 極速上手 (Quick Start)
 

@@ -1,6 +1,7 @@
 import { DrosEmbeddedEngine, EvaluationRequest, EvaluationResult } from './engine.js';
 import { DrosAuditLogger } from './audit.js';
-export { DrosEmbeddedEngine, EvaluationRequest, EvaluationResult, DrosAuditLogger };
+import { DrosPersonalProxyGate } from './personal.js';
+export { DrosEmbeddedEngine, EvaluationRequest, EvaluationResult, DrosAuditLogger, DrosPersonalProxyGate };
 export declare const name = "dsh-plugin-vajraclaw";
 export interface Config {
     gatewayUrl?: string;
@@ -8,6 +9,7 @@ export interface Config {
     strictFailClosed?: boolean;
     licenseKey?: string;
     auditLogDir?: string;
+    personalConfigFile?: string;
 }
 export declare const ConfigSchema: {
     type: string;
@@ -29,6 +31,10 @@ export declare const ConfigSchema: {
             default: string;
         };
         auditLogDir: {
+            type: string;
+            default: string;
+        };
+        personalConfigFile: {
             type: string;
             default: string;
         };
