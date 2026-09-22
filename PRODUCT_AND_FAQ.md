@@ -50,6 +50,9 @@ DROS-VajraClaw enforces six fundamental trust boundaries in real time at the C-A
 
 ## ❓ 4. Technical & Security FAQ (Frequently Asked Questions)
 
+### Q0: Does the DSH Personal Edition fully govern every MCP/CLI execution path?
+**A: No.** The DSH plugin provides a local tool-call failsafe and governance for registered event paths. Arbitrary shell, free-form commands, interpreters, child processes, and other host execution topologies are not automatically covered by one DROS choke point merely because the plugin is installed. An MCP PEP may not mint `ALLOW`; scenarios requiring full authority binding must use the canonical DROS PDP/PEP, typed schemas, verifiable principals, TTL/revocation, executable integrity, and audit path. If the business does not require CLI, do not grant the CLI capability by default.
+
 ### Q1: What if an attacker tries to replace/overwrite the DROS microkernel binary (.dll / .so)?
 **A: DROS cannot be bypassed or compromised through binary tampering.** The architecture enforces a four-layer invariant defense:
 1. **File Overwrites Are Regulated Syscalls**: To overwrite a binary, an agent must execute `cp`, `mv`, `curl`, or file-write syscalls. These actions are evaluated and blocked in-band by DROS before reaching the OS.

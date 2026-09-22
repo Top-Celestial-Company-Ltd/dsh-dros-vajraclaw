@@ -50,6 +50,9 @@ DROS-VajraClaw 於 C-ABI / FFI 帶內執行層實時強制執行六大基礎信�
 
 ## ❓ 四、 技術與資安核心 FAQ (Frequently Asked Questions)
 
+### Q0：DSH 個人版是否等於完整治理所有 MCP／CLI 執行？
+**A：不是。** DSH 外掛提供本機 tool-call failsafe 與已註冊事件路徑的治理；任意 shell、自由文字 command、interpreter、child process 與其他 host execution topology 不會因為安裝外掛就自動納入同一個 DROS choke point。MCP PEP 不得自行核發 `ALLOW`；需要完整 authority binding 時，應使用 canonical DROS PDP／PEP、typed schema、可驗證 principal、TTL／revocation、executable integrity 與 audit path。若業務不需要 CLI，預設不授予 CLI capability。
+
 ### Q1：黑客如果想辦法直接「替換或覆寫」DROS 微核心 (.dll / .so)，系統會破工嗎？
 **A：絕對不會破工。** DROS 具備四重不變量防線：
 1. **更換操作本身即是受管轄的 Syscall**：黑客若要覆寫二進位檔，必須驅使 Agent 執行 `cp`、`mv`、`curl` 或檔案寫入操作。在抵達 OS 前已被 DROS 帶內攔截。

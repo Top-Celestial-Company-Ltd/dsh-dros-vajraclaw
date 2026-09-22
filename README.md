@@ -8,7 +8,9 @@
 
 [English](#english) | [繁體中文說明](#-繁體中文說明) | [🌐 Official Website](https://dr-os.io)
 
-**Local tool-call failsafe for DSH**: blocks high-risk shell patterns (e.g. destructive recursive deletions, fork bombs, disk overwriting) and credential-file reads before execution, with a persistent hash-linked JSONL audit log, and an optional external Gateway for centralized multi-agent policy.
+**Local tool-call failsafe for DSH**: blocks high-risk shell patterns (e.g. destructive recursive deletions, fork bombs, disk overwriting) and credential-file reads before execution, with a persistent hash-linked JSONL audit log, and an optional external Gateway for centralized multi-agent policy. This is a registered tool-call gate, not a proven host-wide CLI choke point.
+
+> **Evidence boundary (MCP/CLI):** Arbitrary shell, free-form commands, and unregistered MCP tools are not covered by a universal DROS governance claim. Scenarios requiring a canonical PDP/PEP, typed schemas, verifiable principals, TTL/revocation, and executable integrity must use a registered DROS authority path. `argv_hash` is an integrity check, not a substitute for semantic argument bounds.
 
 > 🎯 **Dual Architecture Overview:**  
 > 1. **Embedded Mode (Default)**: Zero-dependency local TypeScript pattern-matching failsafe and JSONL audit chain running natively inside DSH with zero latency overhead.
@@ -69,6 +71,10 @@ The brilliance of **DeepSeek Harness (DSH)** lies in its radical openness: *"Eve
 ---
 
 ## 🧭 Governance Scope: What DROS Defends vs. What It Doesn't
+
+### MCP/CLI Product Claim
+
+The DSH plugin governs tool calls observed through the plugin and registered Gateway paths. It does not claim that every shell, interpreter, child process, `execve`/`execveat`, or other host execution topology necessarily passes through DROS. If CLI is not required, do not expose the capability by default; if it is required, use a dedicated OS identity, least privilege, isolation, and additional OS enforcement.
 
 To maintain complete architectural clarity and rigorous technical defense, DROS defines crisp defensive boundaries:
 

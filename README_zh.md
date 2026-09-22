@@ -11,6 +11,8 @@
 
 **DSH 本機工具調用防護外掛**：在工具執行前精準攔截高風險 Shell 指令模式（如遞迴強制刪除、Fork 炸彈、磁區覆寫）與敏感憑證檔案讀取，具備跨 session 持續性之哈希鏈 JSONL 審計記錄，並可選配外部 Gateway 實現全域多 Agent 集中策略治理。
 
+> **證據邊界更新（MCP／CLI）**：DSH 個人版是本機 tool-call failsafe／registered-path gate，不是 host-wide CLI choke point。任意 shell、自由文字 command 與未註冊 MCP tool 不應被視為已受 universal DROS governance；需要 canonical PDP／PEP、typed schema、可驗證 principal、TTL／revocation 與 executable integrity 的場景，應接入已註冊的 DROS authority path。`argv_hash` 只能作完整性校驗，不能取代語意參數邊界。
+
 ---
 
 ## 💡 雙模架構設計 (Dual-Mode Architecture)
@@ -20,7 +22,7 @@ DROS VajraClaw 提供「零依賴本機防護」與「集中式網關」雙模�
 * **模式 1：DSH 嵌入式本機防護 (Embedded Mode，預設)**：
   * 透過 Cordis `apply(ctx, config)` 原生掛載於 DSH。
   * 內建 TypeScript 正規表達式高危模式攔截與持久化哈希鏈審計日誌。
-  * 預設 **Fail-Open (Fail-Safe)**，不破壞宿主正常調用，一鍵安裝即刻獲得本機安全防護。
+  * 預設 **Fail-Open (Fail-Safe)**，不破壞宿主正常調用；這是相容性安全閥，不代表 DROS authority 的 fail-closed 或完整 execution governance。
 * **模式 2：全工作站多 Agent 網關模式 (Gateway Mode，可選)**：
   * 使用者可選配啟動外部 DROS Gateway 容器，外掛自動將策略與審計日誌集中同步。
   * 支援 AGY、Codex、Claude Code、Cursor 多 Agent 共享集中治理邊界。
@@ -87,6 +89,10 @@ DROS VajraClaw 提供「零依賴本機防護」與「集中式網關」雙模�
 ---
 
 ## 🧭 治理邊界：DROS 守護什麼 vs. 不守護什麼
+
+### MCP／CLI 產品聲明
+
+DSH 外掛可治理經由外掛事件與已註冊 Gateway path 的 tool call；目前不宣稱所有 shell、interpreter、child process、`execve`／`execveat` 或其他 host execution topology 都必然經過 DROS。若業務不需要 CLI，建議預設不暴露 CLI capability；若需要 CLI，應採用專用 OS identity、least privilege、隔離 runtime 與額外 OS enforcement。
 
 為了維護極致嚴謹的工程界線與防禦範疇，DROS 明確劃定邊界：
 
